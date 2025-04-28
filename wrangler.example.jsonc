@@ -4,19 +4,23 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "superflare",
-	"main": "./src/worker/index.ts",
+	"name": "your-app-name",
+	"main": "./src/server/index.ts",
 	"compatibility_date": "2025-04-01",
-	"compatibility_flags": [
-		"nodejs_compat"
-	],
-	"observability": {
-		"enabled": true
-	},
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": { "enabled": true },
 	"upload_source_maps": true,
 	"assets": {
 		"not_found_handling": "single-page-application"
-	}
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "your-app-name-db",
+			"database_id": "your-app-name-db-id",
+			"migrations_dir": "./src/server/db/migrations"
+		}
+	]
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
