@@ -13,21 +13,35 @@ function RouteComponent() {
 
 	useEffect(() => {
 		if (!session && !isPending) {
-			navigate({ to: "/sign-in" });
+			navigate({
+				to: "/sign-in",
+			});
 		}
 	}, [session, isPending, navigate]);
 
 	if (isPending) {
 		return (
-			<div className="container mx-auto flex min-h-screen w-full min-w-0 max-w-[90vw] items-center justify-center px-3 py-2 sm:max-w-2xl sm:px-4 md:max-w-3xl">
-				<div className="text-muted-foreground">Loading...</div>
+			<div className="container mx-auto w-full min-w-0 max-w-[90vw] px-3 py-2 sm:max-w-2xl sm:px-4 md:max-w-3xl">
+				<div className="mx-auto w-full max-w-xl space-y-8">
+					<div className="text-center text-muted-foreground">Loading...</div>
+				</div>
 			</div>
 		);
 	}
 
 	if (!session) {
-		return null;
+		return (
+			<div className="container mx-auto w-full min-w-0 max-w-[90vw] px-3 py-2 sm:max-w-2xl sm:px-4 md:max-w-3xl">
+				<div className="mx-auto w-full max-w-xl space-y-8">
+					<div className="text-center text-muted-foreground">Loading...</div>
+				</div>
+			</div>
+		);
 	}
 
-	return <Profile />;
+	return (
+		<div className="container mx-auto w-full min-w-0 max-w-[90vw] px-3 py-2 sm:max-w-2xl sm:px-4 md:max-w-3xl">
+			<Profile />
+		</div>
+	);
 }
