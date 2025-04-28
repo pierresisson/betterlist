@@ -29,6 +29,10 @@ export const auth = (db: DrizzleD1Database, env: Env) => {
 		plugins: [
 			emailOTP({
 				async sendVerificationOTP({ email, otp, type }) {
+					if (env.ENVIRONMENT === "development") {
+						console.log(`Sending verification code to ${email}: ${otp}`);
+						return;
+					}
 					if (type === "sign-in") {
 						const resend = new Resend(env.RESEND_API_KEY);
 						await resend.emails.send({

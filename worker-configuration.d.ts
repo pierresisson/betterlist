@@ -553,7 +553,7 @@ declare class Event {
      */
     get eventPhase(): number;
     /**
-     * Returns true or false depending on how event was initialized. True if event invokes listeners past a ShadowRoot node that is the root of its target, and false otherwise.
+     * Returns true or false depending on how event was initialized. True if event invokes listeners past a Root node that is the root of its target, and false otherwise.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Event/composed)
      */
@@ -643,7 +643,7 @@ declare class Event {
      */
     stopPropagation(): void;
     /**
-     * Returns the invocation target objects of event's path (objects on which listeners will be invoked), except for any nodes in shadow trees of which the shadow root's mode is "closed" that are not reachable from event's currentTarget.
+     * Returns the invocation target objects of event's path (objects on which listeners will be invoked), except for any nodes in  trees of which the  root's mode is "closed" that are not reachable from event's currentTarget.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Event/composedPath)
      */

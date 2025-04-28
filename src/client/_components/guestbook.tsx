@@ -45,6 +45,14 @@ export function Guestbook() {
 		}),
 	);
 
+	const updateProfileMutation = useMutation(
+		trpc.user.updateProfile.mutationOptions({
+			onSuccess: () => {
+				profile.refetch();
+			},
+		}),
+	);
+
 	const form = useAppForm({
 		validators: { onChange: GuestbookSchema },
 		defaultValues: {
@@ -55,6 +63,19 @@ export function Guestbook() {
 			// Use profile data if available, fallback to session, then form value
 			const displayName =
 				profile.data?.name || session?.user?.name || value.name || "Anonymous";
+
+			// If the user is logged in and they've entered a new name, update their profile
+			if (
+				session?.user &&
+				value.name &&
+				!profile.data?.name &&
+				!session.user.name
+			) {
+				updateProfileMutation.mutate({
+					name: value.name,
+				});
+			}
+
 			createMutation.mutate({
 				name: displayName,
 				message: value.message,

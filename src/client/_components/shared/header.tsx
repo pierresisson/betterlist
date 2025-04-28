@@ -15,7 +15,7 @@ export default function Header() {
 			]
 		: [
 				{ to: "/", label: "Home" },
-				{ to: "/sign-in", label: "Sign In" },
+				{ to: "/sign-in", label: "Login" },
 			];
 
 	return (

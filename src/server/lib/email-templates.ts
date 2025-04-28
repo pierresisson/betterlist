@@ -18,7 +18,6 @@ export const verificationCodeEmail = (otp: string) => `
             background-color: #ffffff;
             border-radius: 8px;
             padding: 30px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .code {
             font-size: 32px;
