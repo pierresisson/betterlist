@@ -1,5 +1,5 @@
 {
-	"name": "superflare",
+	"name": "better-cloud",
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
@@ -12,11 +12,11 @@
 		"cf:deploy": "npm run build && wrangler deploy",
 		"check": "biome check --write src --verbose",
 		"check:unsafe": "biome check --write src --unsafe --verbose",
-		"db:touch": "wrangler d1 execute superflare-db --local --command='SELECT 1'",
+		"db:touch": "wrangler d1 execute better-cloud-db --local --command='SELECT 1'",
 		"db:generate": "drizzle-kit generate",
-		"db:migrate": "wrangler d1 migrations apply superflare-db --local",
+		"db:migrate": "wrangler d1 migrations apply better-cloud-db --local",
 		"db:migrate:prod": "ENVIRONMENT=production drizzle-kit migrate",
-		"db:migrate:dtw": "wrangler d1 migrations apply superflare-db --remote",
+		"db:migrate:dtw": "wrangler d1 migrations apply better-cloud-db --remote",
 		"postdeploy": "npm run db:migrate:dtw",
 		"db:studio": "drizzle-kit studio",
 		"db:studio:prod": "ENVIRONMENT=production drizzle-kit studio"
