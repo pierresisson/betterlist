@@ -115,7 +115,7 @@ export function Guestbook() {
 											<field.FormControl>
 												<div className="relative">
 													<Input
-														placeholder="Your name"
+														placeholder="Loading name..."
 														value={field.state.value}
 														onChange={(e) => field.handleChange(e.target.value)}
 														onBlur={field.handleBlur}
@@ -137,7 +137,7 @@ export function Guestbook() {
 							{(profile.data?.name || session?.user?.name) && (
 								<div className="group relative">
 									<Input
-										placeholder="Your name"
+										placeholder="Loading name..."
 										value={profile.data?.name || session?.user?.name}
 										disabled
 										className="cursor-not-allowed"
