@@ -1,4 +1,10 @@
 import { Button } from "@/_components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from "@/_components/ui/card";
 import { Input } from "@/_components/ui/input";
 import { useAppForm } from "@/_components/ui/tanstack-form";
 import { useSession } from "@/lib/auth-client";
@@ -10,7 +16,9 @@ import { z } from "zod";
 import type { GuestBookMessage } from "~/db/schema";
 
 const GuestbookSchema = z.object({
-	name: z.string(),
+	name: z
+		.string()
+		.max(30, { message: "Name cannot be longer than 30 characters" }),
 	message: z
 		.string()
 		.min(1, { message: "Message cannot be empty" })
@@ -105,12 +113,20 @@ export function Guestbook() {
 									{(field) => (
 										<field.FormItem>
 											<field.FormControl>
-												<Input
-													placeholder="Your name"
-													value={field.state.value}
-													onChange={(e) => field.handleChange(e.target.value)}
-													onBlur={field.handleBlur}
-												/>
+												<div className="relative">
+													<Input
+														placeholder="Your name"
+														value={field.state.value}
+														onChange={(e) => field.handleChange(e.target.value)}
+														onBlur={field.handleBlur}
+														maxLength={30}
+													/>
+													{field.state.value.length >= 25 && (
+														<span className="-translate-y-1/2 absolute top-1/2 right-2 text-muted-foreground text-sm">
+															{field.state.value.length}/30
+														</span>
+													)}
+												</div>
 											</field.FormControl>
 											<field.FormMessage />
 										</field.FormItem>
@@ -176,23 +192,26 @@ export function Guestbook() {
 						</p>
 					) : (
 						messages.data?.map((msg: GuestBookMessage) => (
-							<div
-								key={msg.id}
-								className="rounded-lg border bg-card p-4 text-card-foreground"
-							>
-								<div className="flex items-start justify-between">
-									<h3 className="font-semibold">{msg.name}</h3>
-									<time className="text-muted-foreground text-sm">
-										{new Date(msg.createdAt).toLocaleDateString()}
-									</time>
-								</div>
-								<p className="mt-2">{msg.message}</p>
-								{msg.country && (
-									<p className="mt-2 text-muted-foreground text-sm">
-										From: {msg.country}
-									</p>
-								)}
-							</div>
+							<Card key={msg.id} className="gap-0 py-3">
+								<CardHeader>
+									<div className="flex items-start justify-between">
+										<CardTitle className="font-bold text-xl">
+											{msg.name}
+										</CardTitle>
+										<time className="text-muted-foreground text-sm">
+											{new Date(msg.createdAt).toLocaleDateString()}
+										</time>
+									</div>
+								</CardHeader>
+								<CardContent>
+									<p>{msg.message}</p>
+									{msg.country && (
+										<p className="mt-2 text-muted-foreground text-sm">
+											From: {msg.country}
+										</p>
+									)}
+								</CardContent>
+							</Card>
 						))
 					)}
 				</div>

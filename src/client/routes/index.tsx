@@ -1,4 +1,5 @@
 import { Button } from "@/_components/ui/button";
+import { Card, CardContent } from "@/_components/ui/card";
 import { trpc } from "@/lib/trpc-client";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
@@ -33,48 +34,50 @@ function RouteComponent() {
 				{title}
 			</pre>
 			<div className="grid gap-4 sm:gap-6">
-				<section className="rounded-lg border p-3 sm:p-4">
-					<div className="flex items-center justify-center gap-6">
-						<div>
-							<h2 className="mb-2 text-left font-medium">API Status</h2>
-							<Button
-								variant="outline"
-								className="w-full min-w-0 sm:w-auto"
-								onClick={() => {
-									healthCheck.refetch();
-								}}
-							>
-								<div
-									className={`h-2 w-2 rounded-full ${healthCheck.data ? "bg-green-500" : "bg-red-500"}`}
-								/>
-								<span className="text-xs sm:text-sm">
-									{healthCheck.isLoading
-										? "Checking..."
-										: healthCheck.data
-											? "Connected"
-											: "Disconnected"}
-								</span>
-							</Button>
-						</div>
+				<Card className="bg-background p-3 sm:p-4">
+					<CardContent className="p-0">
+						<div className="flex items-center justify-center gap-6">
+							<div>
+								<h2 className="mb-2 text-left font-medium">API Status</h2>
+								<Button
+									variant="outline"
+									className="w-full min-w-0 sm:w-auto"
+									onClick={() => {
+										healthCheck.refetch();
+									}}
+								>
+									<div
+										className={`h-2 w-2 rounded-full ${healthCheck.data ? "bg-green-500" : "bg-red-500"}`}
+									/>
+									<span className="text-xs sm:text-sm">
+										{healthCheck.isLoading
+											? "Checking..."
+											: healthCheck.data
+												? "Connected"
+												: "Disconnected"}
+									</span>
+								</Button>
+							</div>
 
-						<div>
-							<h2 className="mb-2 text-center font-medium sm:text-left">
-								Hello From:
-							</h2>
-							<Button
-								variant="outline"
-								className="w-full min-w-0 sm:w-auto"
-								onClick={() => {
-									helloFrom.refetch();
-								}}
-							>
-								<span className="truncate text-xs sm:text-sm">
-									{helloFrom.data ?? "Click to Check"}
-								</span>
-							</Button>
+							<div>
+								<h2 className="mb-2 text-center font-medium sm:text-left">
+									Hello From:
+								</h2>
+								<Button
+									variant="outline"
+									className="w-full min-w-0 sm:w-auto"
+									onClick={() => {
+										helloFrom.refetch();
+									}}
+								>
+									<span className="truncate text-xs sm:text-sm">
+										{helloFrom.data ?? "Click to Check"}
+									</span>
+								</Button>
+							</div>
 						</div>
-					</div>
-				</section>
+					</CardContent>
+				</Card>
 
 				<section>
 					<h2 className="mb-2 font-medium text-2xl sm:mb-3">Core Features</h2>

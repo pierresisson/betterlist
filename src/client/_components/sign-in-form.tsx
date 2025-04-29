@@ -1,4 +1,3 @@
-import Loader from "@/_components/shared/loader";
 import { useAppForm } from "@/_components/ui/tanstack-form";
 import { authClient, useSession } from "@/lib/auth-client";
 import { useNavigate } from "@tanstack/react-router";
@@ -161,7 +160,15 @@ export function SignInForm() {
 	};
 
 	if (isPending) {
-		return <Loader />;
+		return (
+			<div className="mx-auto mt-10 w-full max-w-md p-6">
+				<h1 className="mb-2 text-center font-bold text-3xl">Welcome ☁️</h1>
+				<p className="mb-6 text-center text-muted-foreground">
+					Enter your email to sign in.
+				</p>
+				{/* Render empty container while loading */}
+			</div>
+		);
 	}
 
 	return (
