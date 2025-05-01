@@ -8,6 +8,9 @@ import * as schema from "../db/schema";
 import { verificationCodeEmail } from "./email-templates";
 
 export const auth = (db: DrizzleD1Database, env: Env) => {
+	console.log("[Auth Config] Initializing better-auth with:");
+	console.log("  baseURL:", env.BETTER_AUTH_URL);
+	console.log("  trustedOrigins:", env.TRUSTED_ORIGINS?.split(",") ?? []);
 	return betterAuth({
 		database: drizzleAdapter(db, {
 			provider: "sqlite",
