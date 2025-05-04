@@ -12,6 +12,7 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import "../index.css";
 import Header from "@/_components/shared/header";
+
 export interface RouterAppContext {
 	trpc: typeof trpc;
 	queryClient: QueryClient;

@@ -37,8 +37,8 @@ const route = app
 	.use(logger())
 	.use("*", (c, next) =>
 		cors({
-			origin: c.env.TRUSTED_ORIGINS.split(","),
-			maxAge: 60 * 60 * 24 * 30,
+			origin: c.env.TRUSTED_ORIGINS,
+			maxAge: 86400,
 			credentials: true,
 		})(c, next),
 	)
@@ -59,24 +59,9 @@ const route = app
 		return next();
 	})
 	.on(["POST", "GET"], "/api/auth/**", async (c) => {
-		console.log(
-			`[Auth Handler] Incoming request: ${c.req.method} ${c.req.url}`,
-		);
 		const db = drizzle(c.env.DB);
 		const authInstance = auth(db, c.env);
 		const response = await authInstance.handler(c.req.raw);
-
-		// Log response headers before returning
-		console.log("[Auth Handler] Response status:", response.status);
-		console.log("[Auth Handler] Response headers:");
-		response.headers.forEach((value, key) => {
-			console.log(`  ${key}: ${value}`);
-		});
-		console.log(
-			"[Auth Handler] Set-Cookie Header:",
-			response.headers.get("Set-Cookie") || "Not found",
-		);
-
 		return response;
 	})
 	.use("/trpc/*", async (c, next) => {

@@ -8,9 +8,6 @@ import * as schema from "../db/schema";
 import { verificationCodeEmail } from "./email-templates";
 
 export const auth = (db: DrizzleD1Database, env: Env) => {
-	console.log("[Auth Config] Initializing better-auth with:");
-	console.log("  baseURL:", env.BETTER_AUTH_URL);
-	console.log("  trustedOrigins:", env.TRUSTED_ORIGINS?.split(",") ?? []);
 	return betterAuth({
 		database: drizzleAdapter(db, {
 			provider: "sqlite",
@@ -18,15 +15,16 @@ export const auth = (db: DrizzleD1Database, env: Env) => {
 		}),
 		secret: env.BETTER_AUTH_SECRET,
 		baseURL: env.BETTER_AUTH_URL,
-		trustedOrigins: env.TRUSTED_ORIGINS?.split(",") ?? [],
+		basePath: "/api/auth",
+		trustedOrigins: [env.TRUSTED_ORIGINS || ""],
 		socialProviders: {
 			google: {
-				clientId: env.GOOGLE_CLIENT_ID,
-				clientSecret: env.GOOGLE_CLIENT_SECRET,
+				clientId: env.GOOGLE_CLIENT_ID || "",
+				clientSecret: env.GOOGLE_CLIENT_SECRET || "",
 			},
 			github: {
-				clientId: env.GITHUB_CLIENT_ID,
-				clientSecret: env.GITHUB_CLIENT_SECRET,
+				clientId: env.GITHUB_CLIENT_ID || "",
+				clientSecret: env.GITHUB_CLIENT_SECRET || "",
 			},
 		},
 		plugins: [
@@ -48,6 +46,11 @@ export const auth = (db: DrizzleD1Database, env: Env) => {
 				},
 			}),
 		],
+		advanced: {
+			crossSubDomainCookies: {
+				enabled: true,
+			},
+		},
 	});
 };
 
