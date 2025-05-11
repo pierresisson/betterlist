@@ -26,6 +26,7 @@ const app = new Hono<{
 		RESEND_API_KEY: string;
 		RESEND_FROM_EMAIL: string;
 		APP_NAME: string;
+		ASSETS: Fetcher;
 	};
 	Variables: {
 		user: User | null;
@@ -76,6 +77,7 @@ const route = app
 			},
 		})(c, next);
 	})
+	.get("*", (c) => c.env.ASSETS.fetch(c.req.raw)) // Catch-All API route for static assets
 	.get("/", (c) => {
 		return c.json({ message: "CF+Hono+tRPC!" });
 	});
