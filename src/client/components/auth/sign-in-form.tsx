@@ -1,11 +1,11 @@
-import { useAppForm } from "@/_components/ui/tanstack-form";
 import { authClient, signIn, useSession } from "@/lib/auth-client";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { useAppForm } from "../ui/tanstack-form";
 
 export function SignInForm() {
 	const navigate = useNavigate({
@@ -129,10 +129,13 @@ export function SignInForm() {
 	const handleGoogleLogin = async () => {
 		try {
 			setIsSubmitting(true);
+			const callbackURL = import.meta.env.PROD
+				? "https://better-cloud.dev/guestbook"
+				: `${import.meta.env.VITE_FRONTEND_URL}/guestbook`;
 			await signIn.social(
 				{
 					provider: "google",
-					callbackURL: `${import.meta.env.VITE_FRONTEND_URL}/guestbook`,
+					callbackURL,
 				},
 				{
 					onSuccess: () => {
@@ -157,10 +160,13 @@ export function SignInForm() {
 	const handleGithubLogin = async () => {
 		try {
 			setIsSubmitting(true);
+			const callbackURL = import.meta.env.PROD
+				? "https://better-cloud.dev/guestbook"
+				: `${import.meta.env.VITE_FRONTEND_URL}/guestbook`;
 			await signIn.social(
 				{
 					provider: "github",
-					callbackURL: `${import.meta.env.VITE_FRONTEND_URL}/guestbook`,
+					callbackURL,
 				},
 				{
 					onSuccess: () => {

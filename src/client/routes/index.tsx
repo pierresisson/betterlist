@@ -1,5 +1,5 @@
-import { Button } from "@/_components/ui/button";
-import { Card, CardContent } from "@/_components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc-client";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";

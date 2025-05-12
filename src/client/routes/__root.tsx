@@ -1,6 +1,6 @@
-import { ThemeProvider } from "@/_components/shared/theme-provider";
-import { Toaster } from "@/_components/ui/sonner";
+import { Toaster } from "@/components/ui/sonner";
 import { useSession } from "@/lib/auth-client";
+import { ThemeProvider } from "@/lib/theme-provider";
 import type { trpc } from "@/lib/trpc-client";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -11,7 +11,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import "../index.css";
-import Header from "@/_components/shared/header";
+import Header from "@/components/shared/header";
 
 export interface RouterAppContext {
 	trpc: typeof trpc;

@@ -5,7 +5,7 @@ import { user } from "../db/schema";
 import { protectedProcedure, router } from "../lib/trpc";
 
 export const userRouter = router({
-	getMyProfile: protectedProcedure.query(async ({ ctx }) => {
+	getProfile: protectedProcedure.query(async ({ ctx }) => {
 		const db = drizzle(ctx.env.DB);
 		const userData = await db
 			.select()

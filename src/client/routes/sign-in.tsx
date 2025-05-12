@@ -1,4 +1,4 @@
-import { SignInForm } from "@/_components/sign-in-form";
+import { SignInForm } from "@/components/auth/sign-in-form";
 import { useSession } from "@/lib/auth-client";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";

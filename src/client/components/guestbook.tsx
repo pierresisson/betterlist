@@ -1,12 +1,7 @@
-import { Button } from "@/_components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-} from "@/_components/ui/card";
-import { Input } from "@/_components/ui/input";
-import { useAppForm } from "@/_components/ui/tanstack-form";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useAppForm } from "@/components/ui/tanstack-form";
 import { useSession } from "@/lib/auth-client";
 import { trpc } from "@/lib/trpc-client";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -31,7 +26,7 @@ export function Guestbook() {
 
 	// Get user profile with automatic refetching on window focus
 	const profile = useQuery({
-		...trpc.user.getMyProfile.queryOptions(),
+		...trpc.user.getProfile.queryOptions(),
 		refetchOnWindowFocus: true,
 		refetchOnMount: true,
 		staleTime: 0, // Consider data stale immediately

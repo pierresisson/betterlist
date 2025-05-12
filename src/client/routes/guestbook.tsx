@@ -1,4 +1,4 @@
-import { Guestbook } from "@/_components/guestbook";
+import { Guestbook } from "@/components/guestbook";
 import { useSession } from "@/lib/auth-client";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";

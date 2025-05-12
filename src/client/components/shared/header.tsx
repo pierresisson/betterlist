@@ -1,19 +1,19 @@
-import { ChevronDown, Github } from "lucide-react";
+import { ChevronDown, ExternalLink } from "lucide-react";
 import { useState } from "react";
 
 import { useSession } from "@/lib/auth-client";
 import { Link } from "@tanstack/react-router";
 
-import { ThemeToggle } from "@/_components/shared/theme-toggle";
-import { Button } from "@/_components/ui/button";
+import UserMenu from "@/components/auth/user-menu";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
+import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from "@/_components/ui/dropdown-menu";
-import { SignOutButton } from "./sign-out-button";
+} from "@/components/ui/dropdown-menu";
 
 export default function Header() {
 	const { data: session } = useSession();
@@ -23,12 +23,8 @@ export default function Header() {
 		? [
 				{ to: "/", label: "Home" },
 				{ to: "/guestbook", label: "Guestbook" },
-				{ to: "/profile", label: "Profile" },
 			]
-		: [
-				{ to: "/", label: "Home" },
-				{ to: "/sign-in", label: "Login" },
-			];
+		: [{ to: "/", label: "Home" }];
 
 	return (
 		<div>
@@ -58,14 +54,18 @@ export default function Header() {
 									</Link>
 								</DropdownMenuItem>
 							))}
-							{session && (
-								<>
-									<DropdownMenuSeparator />
-									<DropdownMenuItem>
-										<SignOutButton />
-									</DropdownMenuItem>
-								</>
-							)}
+							<DropdownMenuSeparator />
+							<DropdownMenuItem asChild className="text-lg">
+								<a
+									href="https://github.com/oscarhernandeziv/better-cloud/tree/main"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="flex w-full items-center gap-1"
+								>
+									Source
+									<ExternalLink className="h-4 w-4" />
+								</a>
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
@@ -77,27 +77,28 @@ export default function Header() {
 							<Link to={to}>{label}</Link>
 						</Button>
 					))}
-				</nav>
-
-				<div className="flex items-center gap-2">
-					{/* Desktop Sign Out Button */}
-					{session && (
-						<div className="hidden md:block">
-							<SignOutButton />
-						</div>
-					)}
-					{/* GitHub and ThemeToggle remain visible */}
-					<Button variant="outline" size="icon" asChild>
+					<Button className="mr-1 text-lg" variant="ghost" asChild>
 						<a
 							href="https://github.com/oscarhernandeziv/better-cloud/tree/main"
 							target="_blank"
 							rel="noopener noreferrer"
-							aria-label="View source code on GitHub"
+							className="flex items-center gap-1"
 						>
-							<Github className="h-5 w-5" />
+							Source
+							<ExternalLink className="h-4 w-4" />
 						</a>
 					</Button>
+				</nav>
+
+				<div className="flex items-center gap-2">
 					<ThemeToggle />
+					{session ? (
+						<UserMenu />
+					) : (
+						<Button variant="outline" asChild>
+							<Link to="/sign-in">Sign In</Link>
+						</Button>
+					)}
 				</div>
 			</div>
 			<hr />

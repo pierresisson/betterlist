@@ -1,4 +1,4 @@
-import { Profile } from "@/_components/profile";
+import { Profile } from "@/components/auth/profile";
 import { useSession } from "@/lib/auth-client";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
