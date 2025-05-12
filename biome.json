@@ -37,6 +37,7 @@
 		"useIgnoreFile": true
 	},
 	"files": {
+		"ignoreUnknown": true,
 		"ignore": [
 			"dist/**",
 			"node_modules/**",

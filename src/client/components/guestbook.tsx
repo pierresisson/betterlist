@@ -8,7 +8,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { z } from "zod";
-import type { GuestBookMessage } from "~/db/schema";
+import type { GuestBookMessage } from "~/db/schema/guestbook";
 
 const GuestbookSchema = z.object({
 	name: z

@@ -1,10 +1,10 @@
-/// <reference types="../../../worker-configuration.d.ts" />
+/// <reference path="../../../worker-configuration.d.ts" />
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { emailOTP } from "better-auth/plugins";
 import type { DrizzleD1Database } from "drizzle-orm/d1";
 import { Resend } from "resend";
-import * as schema from "../db/schema";
+import * as schema from "../db/schema/auth";
 import { verificationCodeEmail } from "./email-templates";
 
 export const auth = (db: DrizzleD1Database, env: Env) => {
@@ -54,7 +54,7 @@ export const auth = (db: DrizzleD1Database, env: Env) => {
 	});
 };
 
-export type BetterAuth = ReturnType<typeof auth>;
+export type BetterAuthInstance = ReturnType<typeof auth>;
 
 // NOTE: To generate better-auth schema using pnpx @better-auth/cli generate,
 // uncomment the following code and comment out the above code
