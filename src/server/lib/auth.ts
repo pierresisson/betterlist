@@ -1,4 +1,5 @@
 /// <reference path="../../../worker-configuration.d.ts" />
+
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { emailOTP } from "better-auth/plugins";
@@ -27,6 +28,24 @@ export const auth = (db: DrizzleD1Database, env: Env) => {
 				clientSecret: env.GITHUB_CLIENT_SECRET || "",
 			},
 		},
+		secondaryStorage: {
+			get: async (key) => {
+				const value = await env.SESSION_KV.get(key);
+				console.log(`KV Cache GET: ${key} → ${value ? "HIT" : "MISS"}`);
+				return value;
+			},
+			set: async (key, value, ttl) => {
+				console.log(`KV Cache SET: ${key} (TTL: ${ttl || "none"})`);
+				if (ttl) {
+					await env.SESSION_KV.put(key, value, { expirationTtl: ttl });
+				} else {
+					await env.SESSION_KV.put(key, value);
+				}
+			},
+			delete: async (key) => {
+				await env.SESSION_KV.delete(key);
+			},
+		},
 		plugins: [
 			emailOTP({
 				async sendVerificationOTP({ email, otp, type }) {
@@ -46,9 +65,18 @@ export const auth = (db: DrizzleD1Database, env: Env) => {
 				},
 			}),
 		],
+		rateLimit: {
+			storage: "secondary-storage",
+		},
 		advanced: {
 			crossSubDomainCookies: {
 				enabled: true,
+			},
+		},
+		session: {
+			cookieCache: {
+				enabled: true,
+				maxAge: 5 * 60, // Cache for 5 minutes
 			},
 		},
 	});
@@ -56,8 +84,11 @@ export const auth = (db: DrizzleD1Database, env: Env) => {
 
 export type BetterAuthInstance = ReturnType<typeof auth>;
 
-// NOTE: To generate better-auth schema using pnpx @better-auth/cli generate,
-// uncomment the following code and comment out the above code
+/*
+To generate better-auth schema using bunx @better-auth/cli generate,
+uncomment the following auth config and comment out the above auth config.
+*/
+
 // const db = drizzle(process.env.BETTER_AUTH_DB!);
 
 // export const auth = betterAuth({

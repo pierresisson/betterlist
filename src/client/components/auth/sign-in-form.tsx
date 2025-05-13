@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 import { useAppForm } from "../ui/tanstack-form";
 
 export function SignInForm() {
@@ -239,7 +240,7 @@ export function SignInForm() {
 											!state.canSubmit || state.isSubmitting || isSubmitting
 										}
 									>
-										{state.isSubmitting || isSubmitting
+										{state.isSubmitting
 											? "Sending code..."
 											: "Send verification code"}
 									</Button>
@@ -329,17 +330,49 @@ export function SignInForm() {
 								<field.FormItem>
 									<field.FormLabel>Verification Code</field.FormLabel>
 									<field.FormControl>
-										<Input
-											type="text"
+										<InputOTP
 											value={field.state.value}
-											onChange={(e) => field.handleChange(e.target.value)}
+											onChange={(value) => field.handleChange(value)}
 											onBlur={field.handleBlur}
 											disabled={isSubmitting}
 											autoComplete="one-time-code"
 											inputMode="numeric"
 											pattern="[0-9]*"
-											placeholder="Enter verification code"
-										/>
+											maxLength={6}
+										>
+											<InputOTPGroup className="justify-center">
+												<InputOTPSlot
+													key={0}
+													index={0}
+													className="h-10 w-10 text-xl"
+												/>
+												<InputOTPSlot
+													key={1}
+													index={1}
+													className="h-10 w-10 text-xl"
+												/>
+												<InputOTPSlot
+													key={2}
+													index={2}
+													className="h-10 w-10 text-xl"
+												/>
+												<InputOTPSlot
+													key={3}
+													index={3}
+													className="h-10 w-10 text-xl"
+												/>
+												<InputOTPSlot
+													key={4}
+													index={4}
+													className="h-10 w-10 text-xl"
+												/>
+												<InputOTPSlot
+													key={5}
+													index={5}
+													className="h-10 w-10 text-xl"
+												/>
+											</InputOTPGroup>
+										</InputOTP>
 									</field.FormControl>
 									<field.FormMessage />
 								</field.FormItem>
@@ -355,9 +388,7 @@ export function SignInForm() {
 										!state.canSubmit || state.isSubmitting || isSubmitting
 									}
 								>
-									{state.isSubmitting || isSubmitting
-										? "Verifying..."
-										: "Verify & Sign In"}
+									{state.isSubmitting ? "Verifying..." : "Verify & Sign In"}
 								</Button>
 							)}
 						</otpForm.Subscribe>

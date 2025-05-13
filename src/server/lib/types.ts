@@ -1,4 +1,5 @@
 /// <reference path="../../../worker-configuration.d.ts" />
+
 import type { Session, User } from "better-auth";
 import type { DBInstance } from "../db";
 import type { BetterAuthInstance } from "./auth";
@@ -6,7 +7,9 @@ import type { BetterAuthInstance } from "./auth";
 // Hono bindings
 export interface AppBindings {
 	Bindings: {
+		ASSETS: Fetcher;
 		DB: D1Database;
+		SESSION_KV: KVNamespace;
 		TRUSTED_ORIGINS: string;
 		ENVIRONMENT: string;
 		CLOUDFLARE_ACCOUNT_ID: string;
@@ -21,7 +24,6 @@ export interface AppBindings {
 		RESEND_API_KEY: string;
 		RESEND_FROM_EMAIL: string;
 		APP_NAME: string;
-		ASSETS: Fetcher;
 	};
 	Variables: {
 		user: User | null;

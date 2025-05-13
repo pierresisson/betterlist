@@ -10,10 +10,11 @@
 	"compatibility_flags": ["nodejs_compat"],
 	"observability": { "enabled": true },
 	"upload_source_maps": true,
+	"placement": { "mode": "smart" },
 	"assets": {
 		"binding": "ASSETS",
 		"directory": "./dist/client",
-		"run_worker_first": true,
+		"run_worker_first": true, // This ensures that worker is hit first for API routes
 		"not_found_handling": "single-page-application"
 	},
 	"routes": [
@@ -28,6 +29,12 @@
 			"database_name": "your-app-name-db",
 			"database_id": "your-app-name-db-id",
 			"migrations_dir": "./src/server/db/migrations"
+		}
+	],
+	"kv_namespaces": [
+		{
+			"binding": "SESSION_KV",
+			"id": "your-app-name-session-kv-id"
 		}
 	]
 	/**
