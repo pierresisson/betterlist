@@ -1,16 +1,13 @@
 import { defineConfig } from "drizzle-kit";
-import { getLocalSQLiteDBPath, loadProdVars } from "./src/server/db/utils";
+import { getLocalSQLiteDBPath } from "./src/server/db/utils";
 
-// Load vars from .prod.vars into process.env
-loadProdVars();
-// Check environment using ENVIRONMENT from .prod.vars
-const isEnvProduction = process.env.ENVIRONMENT === "production";
+const isProd = process.env.ENVIRONMENT === "production";
 
 export default defineConfig({
 	dialect: "sqlite",
 	schema: "./src/server/db/schema",
 	out: "./src/server/db/migrations",
-	...(isEnvProduction
+	...(isProd
 		? {
 				driver: "d1-http",
 				dbCredentials: {

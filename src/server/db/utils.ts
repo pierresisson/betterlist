@@ -43,12 +43,12 @@ export function getLocalSQLiteDBPath() {
 }
 
 /**
- * Loads environment variables from .prod.vars into process.env
+ * Loads environment variables from .env into process.env
  * @returns Record of loaded environment variables
  */
-export function loadProdVars() {
+export function loadEnvVars() {
 	try {
-		const varsPath = path.resolve(".prod.vars");
+		const varsPath = path.resolve(".env");
 		const content = fs.readFileSync(varsPath, { encoding: "utf-8" });
 		const vars: Record<string, string> = {};
 
@@ -64,7 +64,7 @@ export function loadProdVars() {
 
 		return vars;
 	} catch (err) {
-		console.log(`Error loading .prod.vars: ${err}`);
+		console.log(`Error loading .env: ${err}`);
 		return {};
 	}
 }
