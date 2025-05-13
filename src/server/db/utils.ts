@@ -41,30 +41,3 @@ export function getLocalSQLiteDBPath() {
 		throw new Error("Error resolving local D1 DB", { cause: error });
 	}
 }
-
-/**
- * Loads environment variables from .env into process.env
- * @returns Record of loaded environment variables
- */
-export function loadEnvVars() {
-	try {
-		const varsPath = path.resolve(".env");
-		const content = fs.readFileSync(varsPath, { encoding: "utf-8" });
-		const vars: Record<string, string> = {};
-
-		for (const line of content.split("\n")) {
-			const match = line.match(/^([A-Za-z0-9_]+)="([^"]*)"$/);
-			if (match) {
-				const [, key, value] = match;
-				vars[key] = value;
-				// Load into process.env
-				process.env[key] = value;
-			}
-		}
-
-		return vars;
-	} catch (err) {
-		console.log(`Error loading .env: ${err}`);
-		return {};
-	}
-}
