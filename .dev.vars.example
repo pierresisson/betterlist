@@ -14,7 +14,7 @@ GITHUB_CLIENT_ID=""
 GITHUB_CLIENT_SECRET=""
 
 RESEND_API_KEY=""
-RESEND_FROM_EMAIL=""
-APP_NAME=""
+RESEND_FROM_EMAIL="no-reply@your-app-name.com"
+APP_NAME="Your App Name"
 
 TRUSTED_ORIGINS="http://localhost:5173"

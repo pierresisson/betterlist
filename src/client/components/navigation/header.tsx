@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useSession } from "@/lib/auth-client";
 import { Link } from "@tanstack/react-router";
 
-import UserMenu from "@/components/auth/user-menu";
-import { ThemeToggle } from "@/components/shared/theme-toggle";
+import { ThemeToggle } from "@/components/navigation/theme-toggle";
+import UserMenu from "@/components/navigation/user-menu";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,

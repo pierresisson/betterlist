@@ -1,5 +1,4 @@
 import { Toaster } from "@/components/ui/sonner";
-import { useSession } from "@/lib/auth-client";
 import { ThemeProvider } from "@/lib/theme-provider";
 import type { trpc } from "@/lib/trpc-client";
 import type { QueryClient } from "@tanstack/react-query";
@@ -11,7 +10,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import "../index.css";
-import Header from "@/components/shared/header";
+import Header from "@/components/navigation/header";
 
 export interface RouterAppContext {
 	trpc: typeof trpc;
@@ -34,16 +33,6 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 	}),
 });
 
-function AuthGuard({ children }: { children: React.ReactNode }) {
-	const { isPending } = useSession();
-
-	if (isPending) {
-		return children;
-	}
-
-	return children;
-}
-
 function RootComponent() {
 	return (
 		<>
@@ -51,9 +40,7 @@ function RootComponent() {
 			<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
 				<div className="grid h-svh grid-rows-[auto_1fr]">
 					<Header />
-					<AuthGuard>
-						<Outlet />
-					</AuthGuard>
+					<Outlet />
 				</div>
 				<Toaster richColors />
 			</ThemeProvider>

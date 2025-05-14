@@ -3,10 +3,14 @@ import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
-import { useAppForm } from "../ui/tanstack-form";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
+import {
+	InputOTP,
+	InputOTPGroup,
+	InputOTPSlot,
+} from "../../../components/ui/input-otp";
+import { useAppForm } from "../../../components/ui/tanstack-form";
 
 export function SignInForm() {
 	const navigate = useNavigate({

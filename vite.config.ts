@@ -13,6 +13,7 @@ export default defineConfig({
 			autoCodeSplitting: true,
 			routesDirectory: "src/client/routes",
 			generatedRouteTree: "src/client/routeTree.gen.ts",
+			routeToken: "layout",
 		}),
 		react(),
 		cloudflare(),

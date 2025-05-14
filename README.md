@@ -1,83 +1,129 @@
-# React + Vite + Hono + Cloudflare Workers
+# Better-Cloud
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)
+Better-Cloud is a modern, full-stack starter kit built for Cloudflare Workers. It combines a React + Vite frontend with an edge-deployed backend powered by Hono, tRPC, Drizzle ORM, and Cloudflare D1 & KV. Authentication is handled via Better Auth with email OTP and social OAuth login, and state management is seamlessly integrated using the TanStack ecosystem.
 
-This template provides a minimal setup for building a React application with TypeScript and Vite, designed to run on Cloudflare Workers. It features hot module replacement, ESLint integration, and the flexibility of Workers deployments.
+<p align="center">
+  <img src="public/preview-screenshot.png" alt="Better-Cloud Preview" />
+</p>
 
-![React + TypeScript + Vite + Cloudflare Workers](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/fc7b4b62-442b-4769-641b-ad4422d74300/public)
+## Table of Contents
 
-<!-- dash-content-start -->
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Environment Variables](#environment-variables)
+  - [Installation](#installation)
+  - [Development](#development)
+  - [Building & Preview](#building-preview)
+- [Database](#database)
+- [Authentication](#authentication)
+- [Project Structure](#project-structure)
+- [Deployment](#deployment)
+- [License](#license)
 
-🚀 Supercharge your web development with this powerful stack:
+---
 
-- [**React**](https://react.dev/) - A modern UI library for building interactive interfaces
-- [**Vite**](https://vite.dev/) - Lightning-fast build tooling and development server
-- [**Hono**](https://hono.dev/) - Ultralight, modern backend framework
-- [**Cloudflare Workers**](https://developers.cloudflare.com/workers/) - Edge computing platform for global deployment
+## Tech Stack
 
-### ✨ Key Features
-
-- 🔥 Hot Module Replacement (HMR) for rapid development
-- 📦 TypeScript support out of the box
-- 🛠️ ESLint configuration included
-- ⚡ Zero-config deployment to Cloudflare's global network
-- 🎯 API routes with Hono's elegant routing
-- 🔄 Full-stack development setup
-
-Get started in minutes with local development or deploy directly via the Cloudflare dashboard. Perfect for building modern, performant web applications at the edge.
-
-<!-- dash-content-end -->
+- 🖥️ **Frontend**: React 19, TypeScript, Vite for fast builds & HMR
+- 🔄 **Routing & Data**: Tanstack Router, Query, and Form
+- 🎨 **Styling**: Tailwind CSS, shadcn/ui components, sonner toast notifications
+- 🌐 **Backend**: Hono on Cloudflare Workers, end-to-end type-safe API with tRPC & Zod
+- 💾 **Database**: Cloudflare D1 via Drizzle ORM with migrations & local SQLite file for development
+- 🔒 **Authentication**: Email OTP & social OAuth using Better Auth, session caching in CLoudflare KV
+- 🌍 **Edge-First Deployment**: Cloudflare Workers provides a global CDN and cache for fast rendering
+- 🧰 **Tooling**: Biome for linting/formatting, Bun for package management, Wrangler for deployments
 
 ## Getting Started
 
-To start a new project with this template, run:
+### Prerequisites
+
+- Node.js v18+ or Bun v1.2+ installed
+- Wrangler CLI (`npm install -g wrangler`)
+- Cloudflare account with D1 & KV namespaces for production
+
+### Environment Variables
+
+Copy `.dev.vars.example` to `.dev.vars` and fill in the values.
+
+Copy `.env.example` to `.env` and fill in the values.
+### Installation
 
 ```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/vite-react-template
+bun install
 ```
 
-A live deployment of this template is available at:
-[https://react-vite-template.templates.workers.dev](https://react-vite-template.templates.workers.dev)
+### Development
 
-## Development
-
-Install dependencies:
+Start local Vite server and Workers server separately:
 
 ```bash
-npm install
+bun dev     // starts frontend server at http://localhost:5173
+bun cf:dev  // starts backend server at http://localhost:8787
 ```
-
-Start the development server with:
+### Building & Preview
 
 ```bash
-npm run dev
+bun build
+bun preview
 ```
 
-Your application will be available at [http://localhost:5173](http://localhost:5173).
+Preview production build at http://localhost:4173 (default Vite preview port).
 
-## Production
+## Database
 
-Build your project for production:
+- Managed with Drizzle ORM & D1
+- Local SQLite stored under `.wrangler/`
+
+| Script                    | Description                              |
+| ------------------------- | ---------------------------------------- |
+| `npm run db:migrate`      | Apply migrations to local SQLite DB      |
+| `npm run db:migrate:prod` | Apply migrations on remote Cloudflare D1 |
+| `npm run db:studio`       | Launch Drizzle Studio for local DB       |
+| `npm run db:studio:prod`  | Launch Drizzle Studio for prod DB        |
+
+## Authentication
+
+- Email OTP flows via Better Auth plugin
+- Social logins using Google & GitHub
+- Session data cached in KV namespace (`SESSION_KV`)
+- All auth endpoints under `/api/auth/*`
+
+## Project Structure
+
+```
+/ (root)
+├── src
+│   ├── client                    # Frontend application
+│   │   ├── components            # UI & navigation components
+│   │   ├── routes                # Pages & layouts (TanStack Router)
+│   │   ├── lib                   # TRPC client, auth-client, theme-provider
+│   │   ├── index.css             # Tailwind & custom theming
+│   │   └── routeTree.gen.ts      # Auto-generated route definitions
+│   ├── server                    # Backend application on Workers
+│   │   ├── routers               # tRPC routers (health, guestbook, user)
+│   │   ├── middlewares           # Hono middleware (auth/db, CORS, session)
+│   │   ├── db                    # Drizzle schema, migrations, utils
+│   │   └── lib                   # Auth setup, TRPC init, type definitions
+├── dist                          # Production build output
+├── wrangler.jsonc                # Cloudflare Workers configuration
+├── worker-configuration.d.ts     # CF types generated with `wrangler types`
+├── vite.config.ts                # Vite plugin configuration
+├── drizzle.config.ts             # Drizzle-kit configuration
+├── .env                          # Local env variables
+└── .dev.vars                     # Local Cloudflare env variables
+```
+
+## Deployment
+
+Deploy to Cloudflare Workers & D1:
 
 ```bash
-npm run build
+bun cf:deploy
+# or
+bunx wrangler deploy
 ```
 
-Preview your build locally:
+## License
 
-```bash
-npm run preview
-```
-
-Deploy your project to Cloudflare Workers:
-
-```bash
-npx wrangler deploy
-```
-
-## Additional Resources
-
-- [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)
-- [Vite Documentation](https://vitejs.dev/guide/)
-- [React Documentation](https://reactjs.org/)
-- [Hono Documentation](https://hono.dev/)
+MIT License
