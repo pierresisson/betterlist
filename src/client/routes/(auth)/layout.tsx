@@ -1,4 +1,4 @@
-import Loader from "@/components/navigation/loader";
+import Loader from "@/components/navbar/loader";
 import { authClient } from "@/lib/auth-client";
 import { Navigate, Outlet, createFileRoute } from "@tanstack/react-router";
 

@@ -10,7 +10,6 @@
 	"compatibility_flags": ["nodejs_compat"],
 	"observability": { "enabled": true },
 	"upload_source_maps": true,
-	"placement": { "mode": "smart" },
 	"assets": {
 		"binding": "ASSETS",
 		"directory": "./dist/client",

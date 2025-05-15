@@ -1,4 +1,4 @@
-import { authClient, signIn, useSession } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -16,7 +16,7 @@ export function SignInForm() {
 	const navigate = useNavigate({
 		from: "/",
 	});
-	const { isPending, data } = useSession();
+	const { isPending, data } = authClient.useSession();
 	const [isOtpSent, setIsOtpSent] = useState(false);
 	const [email, setEmail] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -137,7 +137,7 @@ export function SignInForm() {
 			const callbackURL = import.meta.env.PROD
 				? "https://better-cloud.dev/guestbook"
 				: `${import.meta.env.VITE_FRONTEND_URL}/guestbook`;
-			await signIn.social(
+			await authClient.signIn.social(
 				{
 					provider: "google",
 					callbackURL,
@@ -168,7 +168,7 @@ export function SignInForm() {
 			const callbackURL = import.meta.env.PROD
 				? "https://better-cloud.dev/guestbook"
 				: `${import.meta.env.VITE_FRONTEND_URL}/guestbook`;
-			await signIn.social(
+			await authClient.signIn.social(
 				{
 					provider: "github",
 					callbackURL,

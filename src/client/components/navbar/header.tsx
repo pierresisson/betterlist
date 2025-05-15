@@ -1,11 +1,11 @@
 import { ChevronDown, ExternalLink } from "lucide-react";
 import { useState } from "react";
 
-import { useSession } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { Link } from "@tanstack/react-router";
 
-import { ThemeToggle } from "@/components/navigation/theme-toggle";
-import UserMenu from "@/components/navigation/user-menu";
+import { ThemeToggle } from "@/components/navbar/theme-toggle";
+import UserMenu from "@/components/navbar/user-menu";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function Header() {
-	const { data: session } = useSession();
+	const { data: session } = authClient.useSession();
 	const [isOpen, setIsOpen] = useState(false);
 
 	const links = session

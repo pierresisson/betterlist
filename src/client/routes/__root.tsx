@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import "../index.css";
-import Header from "@/components/navigation/header";
+import Header from "@/components/navbar/header";
 
 export interface RouterAppContext {
 	trpc: typeof trpc;
