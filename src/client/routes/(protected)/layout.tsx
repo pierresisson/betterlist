@@ -3,10 +3,10 @@ import { authClient } from "@/lib/auth-client";
 import { Navigate, Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(protected)")({
-	component: RouteComponent,
+	component: Layout,
 });
 
-function RouteComponent() {
+function Layout() {
 	const { data: session, isPending } = authClient.useSession();
 
 	if (isPending) {

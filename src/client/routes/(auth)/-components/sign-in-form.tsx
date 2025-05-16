@@ -8,7 +8,7 @@ import {
 import { useAppForm } from "@/components/ui/tanstack-form";
 import { authClient } from "@/lib/auth-client";
 import { useNavigate } from "@tanstack/react-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -16,17 +16,10 @@ export function SignInForm() {
 	const navigate = useNavigate({
 		from: "/",
 	});
-	const { isPending, data } = authClient.useSession();
+	const { isPending } = authClient.useSession();
 	const [isOtpSent, setIsOtpSent] = useState(false);
 	const [email, setEmail] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
-
-	// Redirect if already authenticated
-	useEffect(() => {
-		if (data?.session) {
-			navigate({ to: "/guestbook" });
-		}
-	}, [data?.session, navigate]);
 
 	const emailForm = useAppForm({
 		defaultValues: {

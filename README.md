@@ -71,7 +71,7 @@ As far as I can tell so far, it is necessary to launch both servers in order to 
 ```bash
 bun build     // creates static assets bundle in ./dist/
 bun preview   // preview prod build available at http://localhost:4173
-bun cf:deploy // deploys production build to live site, either at *.username.workers.dev or custom domain 
+bun cf:deploy // deploys production build to live site, either at app-name.username.workers.dev or custom domain 
 ```
 
 ## Database
@@ -90,8 +90,11 @@ bun cf:deploy // deploys production build to live site, either at *.username.wor
 
 - Email OTP flows via Better Auth plugin
 - Social logins using Google & GitHub
-- Session data cached in KV namespace (`SESSION_KV`)
+- User data stored in D1 database (`DB` binding)
+- Session data cached in KV namespace (`SESSION_KV` binding)
 - All auth endpoints under `/api/auth/*`
+
+I'm making use of the trick mentioned in [this issue](https://github.com/cloudflare/workers-sdk/issues/8879) on the workers-sdk repo to get social OAuth working properly. Hopefully once the `_routes.json` proposal (mentioned in [this discussion](https://github.com/cloudflare/workers-sdk/discussions/9143)) launches, this will be a simpler process!
 
 ## Project Structure
 
