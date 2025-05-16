@@ -195,7 +195,7 @@ export function SignInForm() {
 			<div className="mx-auto mt-10 w-full max-w-md p-6">
 				<h1 className="mb-2 text-center font-bold text-3xl">Welcome ☁️</h1>
 				<p className="mb-6 text-center text-muted-foreground">
-					Enter your email to sign in.
+					Choose a sign in method below.
 				</p>
 				{/* Render empty container while loading */}
 			</div>
@@ -206,7 +206,7 @@ export function SignInForm() {
 		<div className="mx-auto mt-10 w-full max-w-md p-6">
 			<h1 className="mb-2 text-center font-bold text-3xl">Welcome ☁️</h1>
 			<p className="mb-6 text-center text-muted-foreground">
-				Enter your email to sign in.
+				Choose a sign in method below.
 			</p>
 
 			{!isOtpSent && (
@@ -224,7 +224,7 @@ export function SignInForm() {
 												onChange={(e) => field.handleChange(e.target.value)}
 												onBlur={field.handleBlur}
 												disabled={isSubmitting}
-												placeholder="Enter your email"
+												placeholder="you@example.com"
 											/>
 										</field.FormControl>
 										<field.FormMessage />
