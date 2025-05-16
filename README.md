@@ -14,7 +14,7 @@ Better-Cloud is a modern, full-stack starter kit built for Cloudflare Workers. I
   - [Environment Variables](#environment-variables)
   - [Installation](#installation)
   - [Development](#development)
-  - [Building & Preview](#building-preview)
+  - [Building, Preview, Deploy](#building-preview)
 - [Database](#database)
 - [Authentication](#authentication)
 - [Project Structure](#project-structure)
@@ -47,6 +47,7 @@ Better-Cloud is a modern, full-stack starter kit built for Cloudflare Workers. I
 Copy `.dev.vars.example` to `.dev.vars` and fill in the values.
 
 Copy `.env.example` to `.env` and fill in the values.
+
 ### Installation
 
 ```bash
@@ -55,20 +56,23 @@ bun install
 
 ### Development
 
+Copy `wrangler.example.jsonc` to `wrangler.jsonc` and update it with your own app data and bindings. Then, every time you edit the `wrangler.jsonc` file, make sure to run `bun cf:typegen` to update the `worker-configuration.d.ts` file with the latest types.
+
 Start local Vite server and Workers server separately:
 
 ```bash
 bun dev     // starts frontend server at http://localhost:5173
-bun cf:dev  // starts backend server at http://localhost:8787
+bun cf:dev  // starts workers server at http://localhost:8787
 ```
-### Building & Preview
+As far as I can tell so far, it is necessary to launch both servers in order to get social OAuth login to function properly in local development. Using only the Vite server (and setting all local url env vars to localhost:5173) returns a "Not Found" error when attempting social login. But if you know a way around this error, please do let me know!
+
+### Build, Preview, Deploy
 
 ```bash
-bun build
-bun preview
+bun build     // creates static assets bundle in ./dist/
+bun preview   // preview prod build available at http://localhost:4173
+bun cf:deploy // deploys production build to live site, either at *.username.workers.dev or custom domain 
 ```
-
-Preview production build at http://localhost:4173 (default Vite preview port).
 
 ## Database
 

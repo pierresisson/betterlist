@@ -1,16 +1,16 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+	InputOTP,
+	InputOTPGroup,
+	InputOTPSlot,
+} from "@/components/ui/input-otp";
+import { useAppForm } from "@/components/ui/tanstack-form";
 import { authClient } from "@/lib/auth-client";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Button } from "../../../components/ui/button";
-import { Input } from "../../../components/ui/input";
-import {
-	InputOTP,
-	InputOTPGroup,
-	InputOTPSlot,
-} from "../../../components/ui/input-otp";
-import { useAppForm } from "../../../components/ui/tanstack-form";
 
 export function SignInForm() {
 	const navigate = useNavigate({
@@ -134,9 +134,11 @@ export function SignInForm() {
 	const handleGoogleLogin = async () => {
 		try {
 			setIsSubmitting(true);
+
 			const callbackURL = import.meta.env.PROD
 				? "https://better-cloud.dev/guestbook"
 				: `${import.meta.env.VITE_FRONTEND_URL}/guestbook`;
+
 			await authClient.signIn.social(
 				{
 					provider: "google",
@@ -165,9 +167,11 @@ export function SignInForm() {
 	const handleGithubLogin = async () => {
 		try {
 			setIsSubmitting(true);
+
 			const callbackURL = import.meta.env.PROD
 				? "https://better-cloud.dev/guestbook"
 				: `${import.meta.env.VITE_FRONTEND_URL}/guestbook`;
+
 			await authClient.signIn.social(
 				{
 					provider: "github",
