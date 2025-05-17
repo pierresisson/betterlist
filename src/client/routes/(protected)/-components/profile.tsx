@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { useAppForm } from "@/components/ui/tanstack-form";
-import { trpc } from "@/lib/trpc-client";
+import { Button } from "@client/components/ui/button";
+import { Card, CardContent } from "@client/components/ui/card";
+import { Input } from "@client/components/ui/input";
+import { useAppForm } from "@client/components/ui/tanstack-form";
+import { trpc } from "@client/lib/trpc-client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Camera, Loader2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";

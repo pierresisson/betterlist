@@ -1,4 +1,4 @@
-import { Guestbook } from "@/routes/(protected)/-components/guestbook";
+import { Guestbook } from "@client/routes/(protected)/-components/guestbook";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(protected)/guestbook")({

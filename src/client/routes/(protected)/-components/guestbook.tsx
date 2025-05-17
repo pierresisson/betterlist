@@ -1,14 +1,19 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { useAppForm } from "@/components/ui/tanstack-form";
-import { authClient } from "@/lib/auth-client";
-import { trpc } from "@/lib/trpc-client";
+import { Button } from "@client/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from "@client/components/ui/card";
+import { Input } from "@client/components/ui/input";
+import { useAppForm } from "@client/components/ui/tanstack-form";
+import { authClient } from "@client/lib/auth-client";
+import { trpc } from "@client/lib/trpc-client";
+import type { GuestBookMessage } from "@server/db/schema/guestbook";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { z } from "zod";
-import type { GuestBookMessage } from "~/db/schema/guestbook";
 
 const GuestbookSchema = z.object({
 	name: z

@@ -9,16 +9,16 @@ Better-Cloud is a modern, full-stack starter kit built for Cloudflare Workers. I
 ## Table of Contents
 
 - [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Database](#database)
+- [Authentication](#authentication)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Environment Variables](#environment-variables)
   - [Installation](#installation)
   - [Development](#development)
-  - [Building, Preview, Deploy](#building-preview)
-- [Database](#database)
-- [Authentication](#authentication)
-- [Project Structure](#project-structure)
-- [Deployment](#deployment)
+  - [Build and Preview](#build-and-preview)
+  - [Deployment](#deployment)
 - [License](#license)
 
 ---
@@ -33,6 +33,53 @@ Better-Cloud is a modern, full-stack starter kit built for Cloudflare Workers. I
 - 🔒 **Authentication**: Email OTP & social OAuth using Better Auth, session caching in CLoudflare KV
 - 🌍 **Edge-First Deployment**: Cloudflare Workers provides a global CDN and cache for fast rendering
 - 🧰 **Tooling**: Biome for linting/formatting, Bun for package management, Wrangler for deployments
+
+## Project Structure
+
+```
+/ (root)
+├── src
+│   ├── client                    # Frontend application
+│   │   ├── components            # UI & navigation components
+│   │   ├── routes                # Pages & layouts (TanStack Router)
+│   │   ├── lib                   # TRPC client, auth-client, theme-provider
+│   │   ├── index.css             # Tailwind & custom theming
+│   │   └── routeTree.gen.ts      # Auto-generated route definitions
+│   ├── server                    # Backend application on Workers
+│   │   ├── routers               # tRPC routers (health, guestbook, user)
+│   │   ├── middlewares           # Hono middleware (auth/db, CORS, session)
+│   │   ├── db                    # Drizzle schema, migrations, utils
+│   │   └── lib                   # Auth setup, TRPC init, type definitions
+├── dist                          # Production build output
+├── wrangler.jsonc                # Cloudflare Workers configuration
+├── worker-configuration.d.ts     # CF types generated with `wrangler types`
+├── vite.config.ts                # Vite plugin configuration
+├── drizzle.config.ts             # Drizzle-kit configuration
+├── .env                          # Local env variables
+└── .dev.vars                     # Local Cloudflare env variables
+```
+## Database
+
+- Managed with Drizzle ORM & D1
+- Local SQLite stored under `.wrangler/`
+
+| Script                    | Description                              |
+| ------------------------- | ---------------------------------------- |
+| `npm run db:migrate`      | Apply migrations to local SQLite DB      |
+| `npm run db:migrate:prod` | Apply migrations on remote Cloudflare D1 |
+| `npm run db:studio`       | Launch Drizzle Studio for local DB       |
+| `npm run db:studio:prod`  | Launch Drizzle Studio for prod DB        |
+
+## Authentication
+
+- Email OTP flows via Better Auth plugin
+- Social OAuth login via Google & GitHub providers
+- User data stored in D1 database (`DB` binding)
+- Session data cached in KV namespace (`SESSION_KV` binding)
+- All auth endpoints under `/api/auth/*`
+
+I'm making use of the trick mentioned in [this issue](https://github.com/cloudflare/workers-sdk/issues/8879) on the workers-sdk repo to get social OAuth working properly. Hopefully once the `_routes.json` proposal (mentioned in [this discussion](https://github.com/cloudflare/workers-sdk/discussions/9143)) launches, this will be a simpler process!
+
 
 ## Getting Started
 
@@ -66,64 +113,16 @@ bun cf:dev  // starts workers server at http://localhost:8787
 ```
 As far as I can tell so far, it is necessary to launch both servers in order to get social OAuth login to function properly in local development. Using only the Vite server (and setting all local url env vars to localhost:5173) returns a "Not Found" error when attempting social login. But if you know a way around this error, please do let me know!
 
-### Build, Preview, Deploy
+### Build and Preview
 
 ```bash
 bun build     // creates static assets bundle in ./dist/
 bun preview   // preview prod build available at http://localhost:4173
-bun cf:deploy // deploys production build to live site, either at app-name.username.workers.dev or custom domain 
 ```
 
-## Database
+### Deployment
 
-- Managed with Drizzle ORM & D1
-- Local SQLite stored under `.wrangler/`
-
-| Script                    | Description                              |
-| ------------------------- | ---------------------------------------- |
-| `npm run db:migrate`      | Apply migrations to local SQLite DB      |
-| `npm run db:migrate:prod` | Apply migrations on remote Cloudflare D1 |
-| `npm run db:studio`       | Launch Drizzle Studio for local DB       |
-| `npm run db:studio:prod`  | Launch Drizzle Studio for prod DB        |
-
-## Authentication
-
-- Email OTP flows via Better Auth plugin
-- Social logins using Google & GitHub
-- User data stored in D1 database (`DB` binding)
-- Session data cached in KV namespace (`SESSION_KV` binding)
-- All auth endpoints under `/api/auth/*`
-
-I'm making use of the trick mentioned in [this issue](https://github.com/cloudflare/workers-sdk/issues/8879) on the workers-sdk repo to get social OAuth working properly. Hopefully once the `_routes.json` proposal (mentioned in [this discussion](https://github.com/cloudflare/workers-sdk/discussions/9143)) launches, this will be a simpler process!
-
-## Project Structure
-
-```
-/ (root)
-├── src
-│   ├── client                    # Frontend application
-│   │   ├── components            # UI & navigation components
-│   │   ├── routes                # Pages & layouts (TanStack Router)
-│   │   ├── lib                   # TRPC client, auth-client, theme-provider
-│   │   ├── index.css             # Tailwind & custom theming
-│   │   └── routeTree.gen.ts      # Auto-generated route definitions
-│   ├── server                    # Backend application on Workers
-│   │   ├── routers               # tRPC routers (health, guestbook, user)
-│   │   ├── middlewares           # Hono middleware (auth/db, CORS, session)
-│   │   ├── db                    # Drizzle schema, migrations, utils
-│   │   └── lib                   # Auth setup, TRPC init, type definitions
-├── dist                          # Production build output
-├── wrangler.jsonc                # Cloudflare Workers configuration
-├── worker-configuration.d.ts     # CF types generated with `wrangler types`
-├── vite.config.ts                # Vite plugin configuration
-├── drizzle.config.ts             # Drizzle-kit configuration
-├── .env                          # Local env variables
-└── .dev.vars                     # Local Cloudflare env variables
-```
-
-## Deployment
-
-Deploy to Cloudflare Workers & D1:
+Deploy to live site on Cloudflare Workers, to custom domain or `app-name.username.workers.dev` domain:
 
 ```bash
 bun cf:deploy

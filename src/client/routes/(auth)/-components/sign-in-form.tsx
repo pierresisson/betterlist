@@ -1,12 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@client/components/ui/button";
+import { Input } from "@client/components/ui/input";
 import {
 	InputOTP,
 	InputOTPGroup,
 	InputOTPSlot,
-} from "@/components/ui/input-otp";
-import { useAppForm } from "@/components/ui/tanstack-form";
-import { authClient } from "@/lib/auth-client";
+} from "@client/components/ui/input-otp";
+import { useAppForm } from "@client/components/ui/tanstack-form";
+import { authClient } from "@client/lib/auth-client";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";

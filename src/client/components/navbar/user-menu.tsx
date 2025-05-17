@@ -1,5 +1,9 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage,
+} from "@client/components/ui/avatar";
+import { Button } from "@client/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -8,12 +12,12 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { authClient } from "@/lib/auth-client";
+} from "@client/components/ui/dropdown-menu";
+import { authClient } from "@client/lib/auth-client";
 import { Link } from "@tanstack/react-router";
 import { LogOutIcon, UserCircleIcon } from "lucide-react";
 
-export default function UserMenu() {
+export function UserMenu() {
 	const { data: session } = authClient.useSession();
 
 	if (!session) {

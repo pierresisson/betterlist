@@ -1,4 +1,5 @@
 {
+	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
 		"target": "ES2020",
@@ -20,13 +21,7 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
-		"noUncheckedSideEffectImports": true,
-
-		"baseUrl": ".",
-		"paths": {
-			"@/*": ["./src/client/*"],
-			"~/*": ["./src/server/*"]
-		}
+		"noUncheckedSideEffectImports": true
 	},
-	"include": ["src/client"]
+	"include": ["src/client", "src/server"]
 }
