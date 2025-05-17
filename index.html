@@ -8,23 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Better-Cloud</title>
-    <script>
-      // Immediately apply theme to prevent flash
-      (function() {
-        try {
-          const theme = localStorage.getItem('vite-ui-theme') || 'dark';
-          document.documentElement.classList.toggle('dark', theme === 'dark');
-          document.documentElement.style.colorScheme = theme;
-          
-          // Set background color immediately to match theme
-          document.documentElement.style.backgroundColor = theme === 'dark' 
-            ? 'oklch(0.147 0.004 49.25)' 
-            : 'oklch(1 0 0)';
-        } catch (e) {
-          console.error(e);
-        }
-      })();
-    </script>
   </head>
 
   <body>
