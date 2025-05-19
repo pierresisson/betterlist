@@ -5,7 +5,7 @@ import { useAppForm } from "@client/components/ui/tanstack-form";
 import { trpc } from "@client/lib/trpc-client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Camera, Loader2 } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -80,15 +80,6 @@ export function Profile() {
 			}
 		},
 	});
-
-	const handleSubmit = useCallback(
-		(e: React.FormEvent) => {
-			e.preventDefault();
-			e.stopPropagation();
-			void form.handleSubmit();
-		},
-		[form],
-	);
 
 	useEffect(() => {
 		if (profile.data) {
@@ -198,7 +189,14 @@ export function Profile() {
 											<div className="w-full flex-1 text-center sm:text-left">
 												{isEditing ? (
 													<form.AppForm>
-														<form className="space-y-3" onSubmit={handleSubmit}>
+														<form
+															onSubmit={(e) => {
+																e.preventDefault();
+																e.stopPropagation();
+																void form.handleSubmit();
+															}}
+															className="space-y-3"
+														>
 															<form.AppField name="name">
 																{(field) => (
 																	<field.FormItem>
