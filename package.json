@@ -10,7 +10,7 @@
 		"cf:dev": "wrangler dev",
 		"cf:typegen": "wrangler types",
 		"cf:check": "tsc && vite build && wrangler deploy --dry-run",
-		"cf:deploy": "bun run build && wrangler deploy",
+		"cf:deploy": "bun run build && wrangler types && wrangler deploy",
 		"check": "biome check --write src --verbose",
 		"check:unsafe": "biome check --write src --unsafe --verbose",
 		"db:touch": "wrangler d1 execute better-cloud-db --local --command='SELECT 1'",

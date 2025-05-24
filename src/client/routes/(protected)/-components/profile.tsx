@@ -5,7 +5,7 @@ import { useAppForm } from "@client/components/ui/tanstack-form";
 import { trpc } from "@client/lib/trpc-client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Camera, Loader2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -81,13 +81,14 @@ export function Profile() {
 		},
 	});
 
-	useEffect(() => {
-		if (profile.data) {
-			// Type assertion with a specific type
-			const userData = profile.data as unknown as UserProfile;
+	// Update form when profile data loads
+	if (profile.data) {
+		const userData = profile.data as unknown as UserProfile;
+		// Only update the form if we haven't edited the name yet
+		if (form.getFieldValue("name") === "") {
 			form.setFieldValue("name", userData.name || "New User");
 		}
-	}, [profile.data, form]);
+	}
 
 	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];

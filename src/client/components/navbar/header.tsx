@@ -39,7 +39,6 @@ export function Header() {
 							>
 								Menu
 								<ChevronDown
-									href="https://github.com/oscarhernandeziv/better-cloud/tree/main"
 									className={`h-4 w-4 transition-transform duration-200 ${
 										isOpen ? "rotate-180" : ""
 									}`}
@@ -58,7 +57,7 @@ export function Header() {
 							<DropdownMenuSeparator />
 							<DropdownMenuItem asChild className="text-lg">
 								<a
-									href="https://github.com/oscarhernandeziv/better-cloud/tree/main"
+									href={import.meta.env.VITE_GITHUB_URL}
 									target="_blank"
 									rel="noopener noreferrer"
 									className="flex w-full items-center gap-1"
@@ -80,7 +79,7 @@ export function Header() {
 					))}
 					<Button className="mr-1 text-lg" variant="ghost" asChild>
 						<a
-							href="https://github.com/oscarhernandeziv/better-cloud/tree/main"
+							href={import.meta.env.VITE_GITHUB_URL}
 							target="_blank"
 							rel="noopener noreferrer"
 							className="flex items-center gap-1"
