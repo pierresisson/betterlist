@@ -128,9 +128,11 @@ export function Profile() {
 		<div className="container mx-auto w-full min-w-0 max-w-[90vw] px-3 py-2 sm:max-w-2xl sm:px-4 md:max-w-3xl">
 			<div className="mx-auto w-full max-w-xl space-y-8">
 				<div className="space-y-4">
-					<h2 className="text-center font-bold text-2xl">Profile</h2>
+					<div className="space-y-2 text-center">
+						<h1 className="font-bold text-4xl">Profile</h1>
+					</div>
 
-					<Card className="overflow-hidden p-2">
+					<Card className="overflow-hidden p-3 sm:p-2">
 						{profile.isLoading ? (
 							<CardContent className="flex items-center justify-center py-4">
 								<div className="text-center text-muted-foreground">
@@ -145,15 +147,15 @@ export function Profile() {
 								</div>
 							</CardContent>
 						) : (
-							<CardContent className="px-4 py-3">
+							<CardContent className="px-4 py-4 sm:px-4 sm:py-3">
 								{/* Type assertion with a specific type */}
 								{(() => {
 									const userData = profile.data as unknown as UserProfile;
 									return (
-										<div className="flex flex-col items-center sm:flex-row sm:items-start sm:space-x-4">
-											<div className="group relative">
+										<div className="flex flex-col items-center space-y-4 sm:flex-row sm:items-start sm:space-x-4 sm:space-y-0">
+											<div className="group relative flex-shrink-0">
 												<div
-													className={`relative h-20 w-20 overflow-hidden rounded-full bg-muted ${isEditing ? "ring-2 ring-primary ring-offset-2" : ""}`}
+													className={`relative h-24 w-24 overflow-hidden rounded-full bg-muted sm:h-20 sm:w-20 ${isEditing ? "ring-2 ring-primary ring-offset-2" : ""}`}
 												>
 													{userData.image ? (
 														<img
@@ -162,7 +164,7 @@ export function Profile() {
 															className="h-full w-full rounded-full object-cover"
 														/>
 													) : (
-														<div className="flex h-full w-full items-center justify-center rounded-full bg-primary font-bold text-3xl text-primary-foreground">
+														<div className="flex h-full w-full items-center justify-center rounded-full bg-primary font-bold text-3xl text-primary-foreground sm:text-3xl">
 															{getInitials(userData.name, userData.email)}
 														</div>
 													)}
@@ -196,7 +198,7 @@ export function Profile() {
 																e.stopPropagation();
 																void form.handleSubmit();
 															}}
-															className="space-y-3"
+															className="space-y-4 sm:space-y-3"
 														>
 															<form.AppField name="name">
 																{(field) => (
@@ -212,11 +214,11 @@ export function Profile() {
 																						field.handleChange(e.target.value)
 																					}
 																					onBlur={field.handleBlur}
-																					className="text-lg"
+																					className="pr-12 text-base sm:text-lg"
 																					maxLength={20}
 																					disabled={updateMutation.isPending}
 																				/>
-																				<span className="-translate-y-1/2 absolute top-1/2 right-2 text-muted-foreground text-sm">
+																				<span className="-translate-y-1/2 absolute top-1/2 right-3 text-muted-foreground text-xs sm:text-sm">
 																					{field.state.value.length}/20
 																				</span>
 																			</div>
@@ -225,11 +227,12 @@ export function Profile() {
 																	</field.FormItem>
 																)}
 															</form.AppField>
-															<div className="flex space-x-2">
+															<div className="flex flex-col space-y-2 sm:flex-row sm:space-x-2 sm:space-y-0">
 																<form.Subscribe>
 																	{(state) => (
 																		<Button
 																			type="submit"
+																			className="w-full sm:w-auto"
 																			disabled={
 																				!state.canSubmit ||
 																				state.isSubmitting ||
@@ -244,6 +247,7 @@ export function Profile() {
 																</form.Subscribe>
 																<Button
 																	variant="outline"
+																	className="w-full sm:w-auto"
 																	onClick={() => {
 																		setIsEditing(false);
 																		form.setFieldValue(
@@ -258,28 +262,31 @@ export function Profile() {
 														</form>
 													</form.AppForm>
 												) : (
-													<div className="space-y-0.5">
-														<div className="flex items-start justify-between">
-															<h3 className="font-semibold text-2xl">
-																{userData.name || "New User"}
-															</h3>
+													<div className="space-y-1 sm:space-y-0.5">
+														<div className="flex flex-col space-y-3 sm:flex-row sm:items-start sm:justify-between sm:space-y-0">
+															<div className="space-y-1">
+																<h3 className="font-semibold text-2xl leading-tight sm:text-2xl">
+																	{userData.name || "New User"}
+																</h3>
+																<p className="text-muted-foreground text-sm sm:text-base">
+																	{userData.email}
+																</p>
+																<p className="text-muted-foreground/50 text-xs italic sm:text-sm">
+																	Member since{" "}
+																	{new Date(
+																		userData.createdAt,
+																	).toLocaleDateString()}
+																</p>
+															</div>
 															<Button
 																variant="outline"
 																size="sm"
+																className="flex-shrink-0 self-center sm:self-start"
 																onClick={() => setIsEditing(true)}
 															>
 																Edit
 															</Button>
 														</div>
-														<p className="text-muted-foreground">
-															{userData.email}
-														</p>
-														<p className="text-muted-foreground/50 text-sm italic">
-															Member since{" "}
-															{new Date(
-																userData.createdAt,
-															).toLocaleDateString()}
-														</p>
 													</div>
 												)}
 											</div>

@@ -35,6 +35,21 @@
 			"binding": "SESSION_KV",
 			"id": "your-app-name-session-kv-id"
 		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"class_name": "Counter",
+				"name": "COUNTER",
+				"script_name": "your-script-name"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"new_sqlite_classes": ["Counter"],
+			"tag": "v1"
+		}
 	]
 	/**
 	 * Smart Placement

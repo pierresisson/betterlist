@@ -94,7 +94,12 @@ export function Guestbook() {
 		<div className="container mx-auto w-full min-w-0 max-w-[90vw] px-3 py-2 sm:max-w-2xl sm:px-4 md:max-w-3xl">
 			<div className="mx-auto w-full max-w-xl space-y-8">
 				<div className="space-y-4">
-					<h2 className="text-center font-bold text-2xl">Guestbook</h2>
+					<div className="space-y-2 text-center">
+						<h1 className="font-bold text-4xl">Guestbook</h1>
+						<p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+							Powered by Cloudflare D1.
+						</p>
+					</div>
 
 					<form.AppForm>
 						<form

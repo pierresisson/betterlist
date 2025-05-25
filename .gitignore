@@ -34,4 +34,4 @@ worker-configuration.d.ts
 .prod.vars
 
 # AI
-.instructions
+.ai

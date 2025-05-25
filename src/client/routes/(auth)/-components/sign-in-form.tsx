@@ -9,6 +9,7 @@ import { useAppForm } from "@client/components/ui/tanstack-form";
 import { authClient } from "@client/lib/auth-client";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -367,6 +368,21 @@ export function SignInForm() {
 					</form>
 				</otpForm.AppForm>
 			)}
+
+			<div className="mt-8 text-center text-muted-foreground text-sm italic">
+				Authentication powered by{" "}
+				<a
+					href="https://better-auth.com"
+					target="_blank"
+					rel="noopener noreferrer"
+					className="inline-flex items-center gap-1 text-muted-foreground underline hover:text-muted-foreground/80"
+				>
+					Better Auth
+					<ExternalLink className="h-3 w-3" />
+				</a>
+				<br />
+				and Cloudflare D1+KV
+			</div>
 		</div>
 	);
 }

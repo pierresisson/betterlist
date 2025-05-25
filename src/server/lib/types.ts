@@ -10,6 +10,7 @@ export interface AppBindings {
 		ASSETS: Fetcher;
 		DB: D1Database;
 		SESSION_KV: KVNamespace;
+		COUNTER: DurableObjectNamespace;
 		TRUSTED_ORIGINS: string;
 		ENVIRONMENT: string;
 		CLOUDFLARE_ACCOUNT_ID: string;
@@ -38,4 +39,23 @@ export interface tRPCContext {
 	env: AppBindings["Bindings"];
 	db: DBInstance;
 	session: Session | null;
+}
+
+// Counter API Types
+export interface CounterState {
+	value: number;
+	lastUpdated: number;
+	totalIncrements: number;
+	totalDecrements: number;
+	lastUpdater: string | null;
+}
+
+export interface CounterOperation {
+	amount?: number;
+}
+
+export interface CounterWebSocketMessage {
+	type: "subscribe" | "counter-update" | "counter-state";
+	data?: CounterState;
+	timestamp: number;
 }

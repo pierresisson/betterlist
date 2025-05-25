@@ -22,6 +22,7 @@ export function Header() {
 	const links = session
 		? [
 				{ to: "/", label: "Home" },
+				{ to: "/counter", label: "Counter" },
 				{ to: "/guestbook", label: "Guestbook" },
 			]
 		: [{ to: "/", label: "Home" }];
