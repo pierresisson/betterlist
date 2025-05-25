@@ -11,6 +11,7 @@ Better-Cloud is a modern, full-stack starter kit built for Cloudflare Workers. I
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Database](#database)
+- [Durable Objects](#durable-objects)
 - [Authentication](#authentication)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -31,6 +32,8 @@ Better-Cloud is a modern, full-stack starter kit built for Cloudflare Workers. I
 - 🌐 **Backend**: Hono on Cloudflare Workers, end-to-end type-safe API with tRPC & Zod
 - 💾 **Database**: Cloudflare D1 via Drizzle ORM with migrations & local SQLite file for development
 - 🔒 **Authentication**: Email OTP & social OAuth using Better Auth, session caching in CLoudflare KV
+- ⚡ **Real-time Features**: Cloudflare Durable Objects with WebSocket hibernation API for stateful, cost-effective real-time updates
+- 🗄️ **Persistent State**: SQLite-backed Durable Objects with ACID transactional guarantees, automatic hibernation, and global consistency
 - 🌍 **Edge-First Deployment**: Cloudflare Workers provides a global CDN and cache for fast rendering
 - 🧰 **Tooling**: Biome for linting/formatting, Bun for package management, Wrangler for deployments
 
@@ -58,6 +61,7 @@ Better-Cloud is a modern, full-stack starter kit built for Cloudflare Workers. I
 ├── .env                          # Local env variables
 └── .dev.vars                     # Local Cloudflare env variables
 ```
+
 ## Database
 
 - Managed with Drizzle ORM & D1
@@ -69,6 +73,34 @@ Better-Cloud is a modern, full-stack starter kit built for Cloudflare Workers. I
 | `npm run db:migrate:prod` | Apply migrations on remote Cloudflare D1 |
 | `npm run db:studio`       | Launch Drizzle Studio for local DB       |
 | `npm run db:studio:prod`  | Launch Drizzle Studio for prod DB        |
+| `bun cf:typegen`          | Generate types from wrangler.jsonc       |
+| `bun cf:dev`              | Start local Workers dev server           |
+| `bun cf:deploy`           | Deploy to Cloudflare Workers             |
+
+## Durable Objects
+
+Better-Cloud includes Durable Objects for stateful, real-time functionality:
+
+### Counter Durable Object
+- **Global state management**: Maintains a persistent counter with strong consistency guarantees
+- **SQLite-backed storage**: All state persists across hibernation with ACID transactions
+- **Real-time WebSocket updates**: Uses hibernation API for cost-effective live synchronization
+- **Comprehensive metrics**: Tracks increments, decrements, last updater, and update timestamps
+- **Automatic cleanup**: Scheduled alarms for periodic maintenance tasks
+
+### Connection Counter Durable Object
+- **Live connection tracking**: Monitors active WebSocket connections across the application
+- **Real-time broadcasting**: Updates all clients when connection counts change
+- **Hibernation-optimized**: Minimal memory usage when idle, instant wake on demand
+
+### Key Benefits
+- **Cost Efficiency**: Hibernation model eliminates memory charges during idle periods
+- **Zero Data Loss**: SQLite provides ACID transactional guarantees with WAL mode
+- **Strong Consistency**: Single Durable Object processes operations sequentially
+- **Edge Performance**: Global deployment with sub-millisecond wake times
+- **Scalable WebSockets**: Support for up to 32,768 concurrent connections per Durable Object
+
+Access the live counter demo at `/counter` to see Durable Objects in action.
 
 ## Authentication
 
@@ -103,7 +135,14 @@ bun install
 
 ### Development
 
-Copy `wrangler.example.jsonc` to `wrangler.jsonc` and update it with your own app data and bindings. Then, every time you edit the `wrangler.jsonc` file, make sure to run `bun cf:typegen` to update the `worker-configuration.d.ts` file with the latest types.
+Copy `wrangler.example.jsonc` to `wrangler.jsonc` and update it with your own app data and bindings:
+
+- Configure D1 database binding (`DB`)
+- Configure KV namespace binding (`SESSION_KV`)
+- Configure Durable Object bindings (`COUNTER`, `CONNECTION_COUNTER`)
+- Set up migration tags for Durable Objects with SQLite classes
+
+Then, every time you edit the `wrangler.jsonc` file, make sure to run `bun cf:typegen` to update the `worker-configuration.d.ts` file with the latest types.
 
 Start local Vite server and Workers server separately:
 
@@ -111,6 +150,14 @@ Start local Vite server and Workers server separately:
 bun dev     // starts frontend server at http://localhost:5173
 bun cf:dev  // starts workers server at http://localhost:8787
 ```
+
+**Important for Durable Objects development:**
+- The Workers dev server (`bun cf:dev`) is required for Durable Objects functionality
+- Durable Objects are automatically created and bound during local development
+- The hibernation API is not used in local development
+- WebSocket connections for real-time features work through the Workers server
+- The frontend connects to both servers: Vite for HMR, Workers for API/WebSocket
+
 As far as I can tell so far, it is necessary to launch both servers in order to get social OAuth login to function properly in local development. Using only the Vite server (and setting all local url env vars to localhost:5173) returns a "Not Found" error when attempting social login. But if you know a way around this error, please do let me know!
 
 ### Build and Preview
@@ -129,6 +176,12 @@ bun cf:deploy
 # or
 bunx wrangler deploy
 ```
+
+**Durable Objects Deployment Notes:**
+- Durable Objects are automatically deployed with your Worker
+- SQLite classes are migrated using the `migrations` configuration in `wrangler.jsonc`
+- First deployment may take longer due to Durable Object initialization
+- Durable Objects maintain state across deployments and updates
 
 ## License
 

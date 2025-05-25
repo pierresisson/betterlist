@@ -8,6 +8,7 @@ import {
 } from "@client/components/ui/card";
 import { Separator } from "@client/components/ui/separator";
 import { Skeleton } from "@client/components/ui/skeleton";
+import { useConnectionWebSocket } from "@client/hooks/useConnectionWebSocket";
 import { useCounter } from "@client/hooks/useCounterQuery";
 import { useCounterWebSocket } from "@client/hooks/useCounterWebSocket";
 import { ConnectionStatus } from "@client/routes/(protected)/-components/counter/connection-status";
@@ -25,18 +26,22 @@ function CounterPage() {
 	const counter = useCounter();
 
 	// WebSocket connection for real-time updates
-	const websocket = useCounterWebSocket({
+	const counterWs = useCounterWebSocket({
 		onCounterUpdate: (_state) => {
-			// Update the query cache with real-time data
 			counter.refetch();
 		},
 	});
+	const connectionWs = useConnectionWebSocket();
 
 	// Auto-connect WebSocket on mount
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
-		websocket.connect();
-		return () => websocket.disconnect();
+		counterWs.connect();
+		connectionWs.connect();
+		return () => {
+			counterWs.disconnect();
+			connectionWs.disconnect();
+		};
 	}, []);
 
 	return (
@@ -50,7 +55,7 @@ function CounterPage() {
 			</div>
 
 			{/* Connection Status */}
-			<ConnectionStatus connection={websocket} />
+			<ConnectionStatus connection={connectionWs} />
 
 			{/* Main Counter Section */}
 			<div className="grid gap-4 lg:grid-cols-2">
@@ -60,7 +65,7 @@ function CounterPage() {
 						<CardTitle className="flex items-center space-x-2 text-xl">
 							<Zap className="h-5 w-5" />
 							<span>Live Counter</span>
-							{websocket.isConnected && (
+							{counterWs.isConnected && (
 								<Badge
 									variant="default"
 									className="bg-green-100 text-green-800"
@@ -181,8 +186,8 @@ function CounterPage() {
 								{`                     SQLite-Backed Durable Object Data Flow
 
 ┌───────────────┐ HTTP/WebSocket ┌─────────────────┐ Requests ┌────────────────┐
-│    Clients    │───────────────▶│  Cloudflare     │─────────▶│   Durable      │
-│               │◀───────────────│    Worker       │◀─────────│    Object      │
+│    Clients    │ ──────────────▶│  Cloudflare     │ ────────▶│   Durable      │
+│               │◀────────────── │    Worker       │◀──────── │    Object      │
 │ • React UI    │   JSON/Events  │                 │          │                │
 │ • WebSocket   │                │ • Route Handler │          │ • In-Memory    │
 │ • Real-time   │                │ • Validation    │          │ • WebSocket    │
@@ -202,7 +207,7 @@ function CounterPage() {
 │                │            │                 │            │                 │
 │ • Memory cache │            │ • Evicted from  │            │ • Constructor   │
 │ • Fast access  │            │   memory        │            │ • SQLite load   │
-│ • WebSockets   │◀───────────│ • Zero cost     │            │ • State restore │
+│ • WebSockets   │◀────────── │ • Zero cost     │            │ • State restore │
 └────────────────┘  continue  └─────────────────┘            └─────────────────┘`}
 							</pre>
 						</div>

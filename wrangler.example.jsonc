@@ -40,8 +40,11 @@
 		"bindings": [
 			{
 				"class_name": "Counter",
-				"name": "COUNTER",
-				"script_name": "your-script-name"
+				"name": "COUNTER"
+			},
+			{
+				"class_name": "ConnectionCounter",
+				"name": "CONNECTION_COUNTER"
 			}
 		]
 	},
@@ -49,6 +52,10 @@
 		{
 			"new_sqlite_classes": ["Counter"],
 			"tag": "v1"
+		},
+		{
+			"new_sqlite_classes": ["ConnectionCounter"],
+			"tag": "v2"
 		}
 	]
 	/**

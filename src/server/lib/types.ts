@@ -2,6 +2,8 @@
 
 import type { Session, User } from "better-auth";
 import type { DBInstance } from "../db";
+import type { ConnectionCounter } from "../durable-objects/connection-counter";
+import type { Counter } from "../durable-objects/counter";
 import type { BetterAuthInstance } from "./auth";
 
 // Hono bindings
@@ -10,7 +12,8 @@ export interface AppBindings {
 		ASSETS: Fetcher;
 		DB: D1Database;
 		SESSION_KV: KVNamespace;
-		COUNTER: DurableObjectNamespace;
+		COUNTER: DurableObjectNamespace<Counter>;
+		CONNECTION_COUNTER: DurableObjectNamespace<ConnectionCounter>;
 		TRUSTED_ORIGINS: string;
 		ENVIRONMENT: string;
 		CLOUDFLARE_ACCOUNT_ID: string;
