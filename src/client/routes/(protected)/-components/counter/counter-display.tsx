@@ -25,6 +25,13 @@ export const CounterDisplay = memo(function CounterDisplay({
 		}).format(new Date(timestamp));
 	};
 
+	const getLastUpdaterDisplay = (lastUpdater: string | null | undefined) => {
+		if (!lastUpdater) {
+			return "Someone";
+		}
+		return lastUpdater;
+	};
+
 	return (
 		<div className={cn("space-y-4 text-center", className)}>
 			{/* Main Counter Value */}
@@ -66,11 +73,9 @@ export const CounterDisplay = memo(function CounterDisplay({
 							{state.lastUpdated ? (
 								<>
 									{formatDate(state.lastUpdated)}
-									{state.lastUpdater ? (
-										<div className="mt-1 text-muted-foreground text-sm">
-											by {state.lastUpdater}
-										</div>
-									) : null}
+									<div className="mt-1 text-muted-foreground text-sm">
+										by {getLastUpdaterDisplay(state.lastUpdater)}
+									</div>
 								</>
 							) : (
 								"Never"

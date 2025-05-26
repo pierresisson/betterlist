@@ -75,19 +75,6 @@ export class CounterAPI {
 		return CounterStateSchema.parse(data);
 	}
 
-	async reset(): Promise<CounterState> {
-		const response = await fetch(`${this.baseUrl}/reset`, {
-			method: "POST",
-		});
-
-		if (!response.ok) {
-			throw new Error(`Failed to reset counter: ${response.statusText}`);
-		}
-
-		const data = await response.json();
-		return CounterStateSchema.parse(data);
-	}
-
 	createWebSocket(): WebSocket {
 		const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
 		const wsUrl = `${protocol}//${window.location.host}${this.baseUrl}/websocket`;

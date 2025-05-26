@@ -52,12 +52,17 @@ counterRouter.post(
 			const id = c.env.COUNTER.idFromName("global-counter");
 			const stub = c.env.COUNTER.get(id);
 
+			// Get user info for lastUpdater tracking
+			const user = c.get("user");
+			const username =
+				user?.name || user?.email?.split("@")[0] || "Anonymous User";
+
 			const response = await stub.fetch("http://counter.do/increment", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
 					amount,
-					username: c.get("user")?.name ?? "Anonymous",
+					username,
 				}),
 			});
 
@@ -93,10 +98,18 @@ counterRouter.post(
 			const id = c.env.COUNTER.idFromName("global-counter");
 			const stub = c.env.COUNTER.get(id);
 
+			// Get user info for lastUpdater tracking
+			const user = c.get("user");
+			const username =
+				user?.name || user?.email?.split("@")[0] || "Anonymous User";
+
 			const response = await stub.fetch("http://counter.do/decrement", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ amount }),
+				body: JSON.stringify({
+					amount,
+					username,
+				}),
 			});
 
 			if (!response.ok) {
@@ -111,28 +124,6 @@ counterRouter.post(
 		}
 	},
 );
-
-// Reset counter
-counterRouter.post("/reset", async (c) => {
-	try {
-		const id = c.env.COUNTER.idFromName("global-counter");
-		const stub = c.env.COUNTER.get(id);
-
-		const response = await stub.fetch("http://counter.do/reset", {
-			method: "POST",
-		});
-
-		if (!response.ok) {
-			throw new Error(`Counter service error: ${response.status}`);
-		}
-
-		const data = (await response.json()) as CounterState;
-		return c.json(data);
-	} catch (error) {
-		console.error("Reset counter error:", error);
-		return c.json({ error: "Failed to reset counter" }, 500);
-	}
-});
 
 // WebSocket endpoint for real-time updates
 counterRouter.get("/websocket", async (c) => {

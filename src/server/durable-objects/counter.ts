@@ -117,11 +117,7 @@ export class Counter extends DurableObject<Env> {
 				return this.handleGetCounter();
 			}
 			if (request.method === "POST") {
-				// Handle reset first (no JSON body expected)
-				if (url.pathname === "/reset") {
-					return await this.handleReset();
-				}
-				// For other POST routes, parse JSON body
+				// For POST routes, parse JSON body
 				const body = (await request.json()) as {
 					amount?: number;
 					username?: string;
@@ -130,7 +126,7 @@ export class Counter extends DurableObject<Env> {
 					case "/increment":
 						return await this.handleIncrement(body.amount || 1, body.username);
 					case "/decrement":
-						return await this.handleDecrement(body.amount || 1);
+						return await this.handleDecrement(body.amount || 1, body.username);
 					default:
 						return new Response("Not found", { status: 404 });
 				}
@@ -175,24 +171,16 @@ export class Counter extends DurableObject<Env> {
 		return this.handleGetCounter();
 	}
 
-	private async handleDecrement(amount = 1): Promise<Response> {
+	private async handleDecrement(
+		amount = 1,
+		username?: string,
+	): Promise<Response> {
 		this.value -= amount;
 		this.totalDecrements += amount;
 		this.lastUpdated = Date.now();
 
-		await this.persistState();
-		this.broadcastCounterUpdate();
-
-		return this.handleGetCounter();
-	}
-
-	private async handleReset(): Promise<Response> {
-		this.value = 0;
-		this.totalIncrements = 0;
-		this.totalDecrements = 0;
-		this.lastUpdated = Date.now();
-		// Reset lastUpdater on state reset
-		this.lastUpdater = null;
+		// Record last updater
+		this.lastUpdater = username ?? null;
 
 		await this.persistState();
 		this.broadcastCounterUpdate();
