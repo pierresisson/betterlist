@@ -1,4 +1,3 @@
-import { Badge } from "@client/components/ui/badge";
 import {
 	Card,
 	CardContent,
@@ -8,9 +7,8 @@ import {
 } from "@client/components/ui/card";
 import { Separator } from "@client/components/ui/separator";
 import { Skeleton } from "@client/components/ui/skeleton";
-import { useConnectionWebSocket } from "@client/hooks/useConnectionWebSocket";
 import { useCounter } from "@client/hooks/useCounterQuery";
-import { useCounterWebSocket } from "@client/hooks/useCounterWebSocket";
+import { useDualWebSocket } from "@client/hooks/useDualWebSocket";
 import { ConnectionStatus } from "@client/routes/(protected)/-components/counter/connection-status";
 import { CounterControls } from "@client/routes/(protected)/-components/counter/counter-controls";
 import { CounterDisplay } from "@client/routes/(protected)/-components/counter/counter-display";
@@ -25,22 +23,19 @@ export const Route = createFileRoute("/(protected)/counter")({
 function CounterPage() {
 	const counter = useCounter();
 
-	// WebSocket connection for real-time updates
-	const counterWs = useCounterWebSocket({
-		onCounterUpdate: (_state) => {
+	// Dual WebSocket connection for real-time updates to both durable objects
+	const dualWs = useDualWebSocket({
+		onCounterUpdate: () => {
 			counter.refetch();
 		},
 	});
-	const connectionWs = useConnectionWebSocket();
 
 	// Auto-connect WebSocket on mount
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
-		counterWs.connect();
-		connectionWs.connect();
+		dualWs.connect();
 		return () => {
-			counterWs.disconnect();
-			connectionWs.disconnect();
+			dualWs.disconnect();
 		};
 	}, []);
 
@@ -55,7 +50,7 @@ function CounterPage() {
 			</div>
 
 			{/* Connection Status */}
-			<ConnectionStatus connection={connectionWs} />
+			<ConnectionStatus connection={dualWs} />
 
 			{/* Main Counter Section */}
 			<div className="grid gap-4 lg:grid-cols-2">
@@ -65,14 +60,6 @@ function CounterPage() {
 						<CardTitle className="flex items-center space-x-2 text-xl">
 							<Zap className="h-5 w-5" />
 							<span>Live Counter</span>
-							{counterWs.isConnected && (
-								<Badge
-									variant="default"
-									className="bg-green-100 text-green-800"
-								>
-									Live
-								</Badge>
-							)}
 						</CardTitle>
 						<CardDescription>
 							This counter is synced and stored globally using SQLite-backed
