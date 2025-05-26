@@ -111,6 +111,12 @@ export function ConnectionStatus({
 					<p className="text-base text-muted-foreground">{getStatusText()}</p>
 
 					<div className="flex space-x-2">
+						{connectionState === "connecting" && (
+							<Button variant="default" size="sm" disabled>
+								<Loader2 className="mr-1 h-4 w-4 animate-spin" />
+								Connecting...
+							</Button>
+						)}
 						{!isConnected && connectionState !== "connecting" && (
 							<Button variant="default" size="sm" onClick={connect}>
 								Connect

@@ -124,24 +124,15 @@ export function useDualWebSocket({
 					}
 
 					try {
-						const parsed = JSON.parse(event.data) as
-							| CounterWebSocketMessage
-							| ConnectionCountMessage;
-
-						// Handle connection count updates from Counter DO
-						if (parsed.type === "connection-count") {
-							setConnectionCount((parsed as ConnectionCountMessage).count);
-							return;
-						}
+						const parsed = JSON.parse(event.data) as CounterWebSocketMessage;
 
 						// Handle counter update or initial state messages
 						if (
 							parsed.type === "counter-update" ||
 							parsed.type === "counter-state"
 						) {
-							const counterMessage = parsed as CounterWebSocketMessage;
-							if (counterMessage.data && callbackRef.current) {
-								callbackRef.current(counterMessage.data);
+							if (parsed.data && callbackRef.current) {
+								callbackRef.current(parsed.data);
 							}
 						}
 					} catch (error) {
@@ -199,6 +190,7 @@ export function useDualWebSocket({
 						// Handle connection count updates from ConnectionCounter DO
 						if (parsed.type === "connection-count") {
 							setConnectionCount(parsed.count);
+							return;
 						}
 					} catch (error) {
 						console.error(
@@ -299,6 +291,30 @@ export function useDualWebSocket({
 		isManuallyDisconnected.current = true;
 		clearTimeouts();
 
+		// Send unsubscribe messages before closing connections
+		if (counterWsRef.current?.readyState === WebSocket.OPEN) {
+			try {
+				counterWsRef.current.send(
+					JSON.stringify({ type: "unsubscribe", timestamp: Date.now() }),
+				);
+			} catch (error) {
+				console.error("Error sending unsubscribe to Counter WebSocket:", error);
+			}
+		}
+
+		if (connectionCounterWsRef.current?.readyState === WebSocket.OPEN) {
+			try {
+				connectionCounterWsRef.current.send(
+					JSON.stringify({ type: "unsubscribe", timestamp: Date.now() }),
+				);
+			} catch (error) {
+				console.error(
+					"Error sending unsubscribe to ConnectionCounter WebSocket:",
+					error,
+				);
+			}
+		}
+
 		// Close both WebSocket connections
 		if (counterWsRef.current) {
 			counterWsRef.current.close();
@@ -311,7 +327,7 @@ export function useDualWebSocket({
 
 		setConnectionState("disconnected");
 		setReconnectCount(0);
-		setConnectionCount(0);
+		setConnectionCount((prev) => Math.max(prev - 1, 0));
 	}, [clearTimeouts]);
 
 	useEffect(() => {

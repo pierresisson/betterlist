@@ -249,6 +249,10 @@ export class Counter extends DurableObject<Env> {
 
 				// Broadcast updated connection count to all clients
 				this.broadcastConnectionCount();
+			} else if (data.type === "unsubscribe") {
+				// Handle explicit unsubscribe - broadcast updated count
+				// Use setTimeout to ensure proper timing with connection closure
+				setTimeout(() => this.broadcastConnectionCount(), 10);
 			}
 		} catch (error) {
 			console.error("WebSocket message error:", error);
@@ -266,12 +270,17 @@ export class Counter extends DurableObject<Env> {
 			`WebSocket closed: code=${code}, reason="${reason}", wasClean=${wasClean}`,
 		);
 
-		// Broadcast updated connection count to all remaining clients
-		this.broadcastConnectionCount();
+		// Use setTimeout to ensure the WebSocket is fully removed from hibernation state
+		// before counting remaining connections. This fixes timing issues in production
+		// where the hibernation API may not immediately remove the closed WebSocket.
+		setTimeout(() => this.broadcastConnectionCount(), 10);
 	}
 
 	async webSocketError(_ws: WebSocket, error: unknown) {
 		console.error("WebSocket error in Durable Object:", error);
+
+		// Also broadcast count in case of errors to ensure consistency
+		setTimeout(() => this.broadcastConnectionCount(), 10);
 	}
 
 	// Broadcast the number of active WebSocket connections to all subscribed clients
