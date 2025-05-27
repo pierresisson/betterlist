@@ -47,11 +47,6 @@ export class Counter extends DurableObject<Env> {
 				this.lastUpdated = stored.last_updated;
 				this.lastUpdater = stored.last_updater;
 			}
-			// Schedule periodic cleanup alarm if not already set
-			const existingAlarm = await this.ctx.storage.getAlarm();
-			if (!existingAlarm) {
-				await this.ctx.storage.setAlarm(Date.now() + 24 * 60 * 60 * 1000);
-			}
 
 			this.initialized = true;
 			console.debug("Counter Durable Object initialized successfully");
@@ -165,7 +160,6 @@ export class Counter extends DurableObject<Env> {
 		this.lastUpdater = username ?? null;
 
 		await this.persistState();
-		// lastUpdater persisted via SQL in persistState
 		this.broadcastCounterUpdate();
 
 		return this.handleGetCounter();
@@ -246,13 +240,6 @@ export class Counter extends DurableObject<Env> {
 				});
 
 				ws.send(stateMessage);
-
-				// Broadcast updated connection count to all clients
-				this.broadcastConnectionCount();
-			} else if (data.type === "unsubscribe") {
-				// Handle explicit unsubscribe - broadcast updated count
-				// Use setTimeout to ensure proper timing with connection closure
-				setTimeout(() => this.broadcastConnectionCount(), 10);
 			}
 		} catch (error) {
 			console.error("WebSocket message error:", error);
@@ -269,37 +256,10 @@ export class Counter extends DurableObject<Env> {
 		console.debug(
 			`WebSocket closed: code=${code}, reason="${reason}", wasClean=${wasClean}`,
 		);
-
-		// Use setTimeout to ensure the WebSocket is fully removed from hibernation state
-		// before counting remaining connections. This fixes timing issues in production
-		// where the hibernation API may not immediately remove the closed WebSocket.
-		setTimeout(() => this.broadcastConnectionCount(), 10);
 	}
 
 	async webSocketError(_ws: WebSocket, error: unknown) {
 		console.error("WebSocket error in Durable Object:", error);
-
-		// Also broadcast count in case of errors to ensure consistency
-		setTimeout(() => this.broadcastConnectionCount(), 10);
-	}
-
-	// Broadcast the number of active WebSocket connections to all subscribed clients
-	private broadcastConnectionCount() {
-		const sockets = this.ctx.getWebSockets("counter-updates");
-		const count = sockets.length;
-		console.debug(`[Counter DO] Active WebSocket connections: ${count}`);
-		const message = JSON.stringify({
-			type: "connection-count",
-			count,
-			timestamp: Date.now(),
-		});
-		for (const socket of sockets) {
-			try {
-				socket.send(message);
-			} catch (error) {
-				console.error("Connection count broadcast error:", error);
-			}
-		}
 	}
 
 	private broadcastCounterUpdate() {
@@ -321,27 +281,6 @@ export class Counter extends DurableObject<Env> {
 				socket.send(message);
 			} catch (error) {
 				console.error("Broadcast error:", error);
-			}
-		}
-	}
-
-	// Add alarm handler for periodic cleanup
-	async alarm(): Promise<void> {
-		try {
-			await this.ensureInitialized();
-
-			console.debug("Alarm triggered for periodic cleanup");
-			// TODO: Add any periodic cleanup logic here
-
-			// Schedule next alarm
-			await this.ctx.storage.setAlarm(Date.now() + 24 * 60 * 60 * 1000);
-		} catch (error) {
-			console.error("Alarm handler error:", error);
-			// Still try to schedule next alarm even if cleanup fails
-			try {
-				await this.ctx.storage.setAlarm(Date.now() + 24 * 60 * 60 * 1000);
-			} catch (alarmError) {
-				console.error("Failed to schedule next alarm:", alarmError);
 			}
 		}
 	}

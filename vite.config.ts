@@ -54,9 +54,6 @@ export default defineConfig({
 						"lucide-react",
 					],
 
-					// Separate drag and drop
-					dnd: ["@hello-pangea/dnd"],
-
 					// Separate auth
 					auth: ["better-auth"],
 				},

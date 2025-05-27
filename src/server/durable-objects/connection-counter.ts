@@ -5,26 +5,22 @@ type Env = AppBindings["Bindings"];
 
 export class ConnectionCounter extends DurableObject<Env> {
 	private broadcastConnectionCount() {
-		try {
-			const count = this.ctx.getWebSockets("connection-updates").length;
-			const msg = JSON.stringify({
-				type: "connection-count",
-				count,
-				timestamp: Date.now(),
-			});
-			
-			const sockets = this.ctx.getWebSockets("connection-updates");
-			for (const socket of sockets) {
+		const sockets = this.ctx.getWebSockets("connection-updates");
+		const count = sockets.length;
+		const msg = JSON.stringify({
+			type: "connection-count",
+			count,
+			timestamp: Date.now(),
+		});
+
+		for (const socket of sockets) {
+			if (socket.readyState === WebSocket.OPEN) {
 				try {
-					if (socket.readyState === WebSocket.OPEN) {
-						socket.send(msg);
-					}
+					socket.send(msg);
 				} catch (error) {
 					console.error("ConnectionCounter broadcast error:", error);
 				}
 			}
-		} catch (error) {
-			console.error("ConnectionCounter broadcastConnectionCount error:", error);
 		}
 	}
 
@@ -53,10 +49,10 @@ export class ConnectionCounter extends DurableObject<Env> {
 				const [client, server] = Object.values(webSocketPair);
 				this.ctx.acceptWebSocket(server, ["connection-updates"]);
 				console.debug("WebSocket accepted successfully (ConnectionCounter)");
-				
+
 				// Broadcast updated count after accepting new connection
 				setTimeout(() => this.broadcastConnectionCount(), 0);
-				
+
 				return new Response(null, { status: 101, webSocket: client });
 			} catch (error) {
 				console.error(
@@ -111,7 +107,7 @@ export class ConnectionCounter extends DurableObject<Env> {
 		console.debug(
 			`WebSocket closed (ConnectionCounter): code=${code}, reason=${reason}, wasClean=${wasClean}`,
 		);
-		
+
 		// Use setTimeout to ensure the WebSocket is fully removed from hibernation state
 		// before counting remaining connections. This fixes timing issues in production
 		// where the hibernation API may not immediately remove the closed WebSocket.
@@ -120,7 +116,7 @@ export class ConnectionCounter extends DurableObject<Env> {
 
 	async webSocketError(_ws: WebSocket, error: unknown) {
 		console.error("WebSocket error in ConnectionCounter DO:", error);
-		
+
 		// Also broadcast count in case of errors to ensure consistency
 		setTimeout(() => this.broadcastConnectionCount(), 10);
 	}

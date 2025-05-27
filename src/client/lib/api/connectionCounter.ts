@@ -25,12 +25,9 @@ export class ConnectionCounterAPI {
 			}
 		}, 10000); // 10 second timeout
 
-		ws.addEventListener("open", () => {
-			clearTimeout(connectionTimeout);
-		});
+		ws.addEventListener("open", () => clearTimeout(connectionTimeout));
 
 		ws.addEventListener("error", (error) => {
-			clearTimeout(connectionTimeout);
 			console.error(
 				"WebSocket connection error (ConnectionCounterAPI):",
 				error,
