@@ -22,3 +22,8 @@ binding = "DB"
 database_name = "betterlist-db"
 database_id = "848408ba-2d89-4ade-8299-1e153126f866"
 migrations_dir = "./src/server/db/migrations"
+
+[[kv_namespaces]]
+binding = "SESSION_KV"
+id = "your-kv-namespace-id"
+preview_id = "your-preview-kv-namespace-id"

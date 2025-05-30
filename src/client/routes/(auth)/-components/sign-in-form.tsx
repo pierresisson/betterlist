@@ -50,7 +50,7 @@ export function SignInForm() {
 			const session = await authClient.getSession();
 			if (session) {
 				navigate({
-					to: "/guestbook",
+					to: "/profile",
 				});
 			} else {
 				toast.error("Failed to establish session");
@@ -65,8 +65,8 @@ export function SignInForm() {
 	const socialSignInMutation = useMutation({
 		mutationFn: async ({ provider }: { provider: "google" | "github" }) => {
 			const callbackURL = import.meta.env.PROD
-				? `${import.meta.env.VITE_FRONTEND_PROD_URL}/guestbook`
-				: `${import.meta.env.VITE_FRONTEND_DEV_URL}/guestbook`;
+				? `${import.meta.env.VITE_FRONTEND_PROD_URL}/profile`
+				: `${import.meta.env.VITE_FRONTEND_DEV_URL}/profile`;
 
 			return authClient.signIn.social({
 				provider,
