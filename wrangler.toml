@@ -1,0 +1,24 @@
+name = "betterlist"
+main = "./src/server/index.ts"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+upload_source_maps = true
+
+[observability]
+enabled = true
+
+[assets]
+binding = "ASSETS"
+directory = "./dist/client"
+run_worker_first = true
+not_found_handling = "single-page-application"
+
+[[routes]]
+pattern = "betterlist.app"
+custom_domain = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "betterlist-db"
+database_id = "848408ba-2d89-4ade-8299-1e153126f866"
+migrations_dir = "./src/server/db/migrations"
