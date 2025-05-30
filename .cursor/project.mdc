@@ -1,0 +1,108 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+## Project Overview
+BetterList is a versatile list-making application designed to help users create, share, and manage various types of lists. It includes features for comparing lists, ranking, and gamification based on themes.
+
+### Examples of Lists
+BetterList allows users to create lists for virtually any purpose, such as:
+- 📝 **Todo lists**: "Tasks to complete this week"
+- 🎥 **Movie watchlists**: "Movies to watch in 2025", "Top horror movies"
+- 🛒 **Shopping lists**: "Groceries for the week", "Supplies for camping"
+- 🗺️ **Travel itineraries**: "Places to visit during my road trip", "Top destinations in Europe"
+- 📚 **Reading lists**: "Books to read before the end of the year", "Top fantasy novels"
+- 🎮 **Gaming lists**: "Games to finish in 2025", "Best multiplayer games"
+- 🎯 **Bucket lists**: "Things to do before turning 30", "Adventures to try before I die"
+- 🍽️ **Recipe lists**: "Favorite recipes", "Dishes to try this month"
+- 🏆 **Challenge lists**: "Fitness goals for the year", "30-day productivity challenge"
+- 🎁 **Gift ideas**: "Birthday gift ideas for friends", "Christmas shopping list"
+- 🏅 **Ranking lists**: "Top 10 restaurants in my city", "Best albums of 2025"
+
+---
+
+## Key Features
+
+### Sharing & Collaboration
+- **Share Lists**: Users can share their lists with friends, family, or the public via a unique link.
+- **Collaborative Editing**: Shared lists can be edited collaboratively in real time.
+- **Compare Lists**: Compare your lists with others to find common items or unique ideas.
+
+### Ranking & Gamification
+- **Leaderboards**: Users can rank their lists based on themes (e.g., "Most popular travel destinations").
+- **Achievements**: Unlock badges for completing lists, sharing lists, or reaching milestones.
+- **Challenges**: Participate in themed challenges (e.g., "Create the best horror movie list").
+- **Points System**: Earn points for completing tasks, sharing lists, or engaging with the community.
+
+### Monetization
+- **Free Mode**: Users can create up to 3 lists (subject to refinement).
+- **Premium Mode**: €3.99/month for unlimited lists, AI-powered features, and advanced sharing options.
+- **Pro Mode** (optional for future releases): €10/month with additional benefits, such as exclusive themes, advanced analytics, and priority support.
+
+---
+
+## Tech Stack
+
+### 🖥️ Frontend
+- **Framework**: React 19
+- **Language**: TypeScript
+- **Build Tool**: Vite (for fast builds and HMR)
+- **Styling**: Tailwind CSS, shadcn/ui components
+- **Notifications**: Sonner toast notifications
+
+### 🔄 Routing & Data Management
+- **Routing**: Tanstack Router
+- **Data Fetching**: Tanstack Query
+- **Forms**: Tanstack Form
+
+### 🌐 Backend
+- **Framework**: Hono (running on Cloudflare Workers)
+- **API**: End-to-end type-safe API using tRPC & Zod
+
+### 💾 Database
+- **Primary Database**: Cloudflare D1 (via Drizzle ORM)
+- **Development**: Local SQLite file for migrations and testing
+
+### 🔒 Authentication
+- **Methods**: Email OTP & social OAuth (via Better Auth)
+- **Session Management**: Cached in Cloudflare KV
+
+### ⚡ Real-Time Features
+- **Technology**: Cloudflare Durable Objects
+- **API**: WebSocket hibernation for stateful, cost-effective real-time updates
+
+### 🗄️ Persistent State
+- **Storage**: SQLite-backed Durable Objects
+- **Features**: ACID transactional guarantees, automatic hibernation, and global consistency
+
+### 🌍 Edge-First Deployment
+- **Platform**: Cloudflare Workers
+- **Benefits**: Global CDN and caching for fast rendering
+
+### 🧰 Tooling
+- **Linting/Formatting**: Biome
+- **Package Management**: Bun
+- **Deployment**: Wrangler
+
+---
+
+## Rules for AI Cursor
+
+### File Structure
+- **Frontend**: All React components should be placed in the `src/components` directory.
+- **Backend**: API routes and logic should be stored in the `src/server` directory.
+- **Database**: Migrations and ORM configurations should be in the `src/db` directory.
+
+### Code Style
+- Use **TypeScript** for all files.
+- Follow **Biome** linting rules for consistent formatting.
+- Use **Tailwind CSS** for styling; avoid inline styles unless necessary.
+
+### Deployment
+- Use **Wrangler** for deploying Cloudflare Workers.
+- Ensure **SQLite migrations** are applied before deployment.
+
+### Testing
+- Write unit tests for critical components and API endpoints.
+- Use **Vitest** for testing React components and backend logic.

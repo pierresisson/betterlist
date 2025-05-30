@@ -52,13 +52,4 @@ CREATE TABLE `verification` (
 );
 --> statement-breakpoint
 CREATE INDEX `idx_verification_identifier` ON `verification` (`identifier`);--> statement-breakpoint
-CREATE INDEX `idx_verification_expires_at` ON `verification` (`expires_at`);--> statement-breakpoint
-CREATE TABLE `guestbook_message` (
-	`id` integer PRIMARY KEY NOT NULL,
-	`name` text NOT NULL,
-	`message` text NOT NULL,
-	`country` text,
-	`created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
---> statement-breakpoint
-CREATE INDEX `idx_guestbook_created_at` ON `guestbook_message` (`created_at`);
+CREATE INDEX `idx_verification_expires_at` ON `verification` (`expires_at`);

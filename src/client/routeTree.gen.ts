@@ -15,8 +15,6 @@ import { Route as protectedLayoutImport } from './routes/(protected)/layout'
 import { Route as authLayoutImport } from './routes/(auth)/layout'
 import { Route as IndexImport } from './routes/index'
 import { Route as protectedProfileImport } from './routes/(protected)/profile'
-import { Route as protectedGuestbookImport } from './routes/(protected)/guestbook'
-import { Route as protectedCounterImport } from './routes/(protected)/counter'
 import { Route as authSignInImport } from './routes/(auth)/sign-in'
 
 // Create/Update Routes
@@ -40,18 +38,6 @@ const IndexRoute = IndexImport.update({
 const protectedProfileRoute = protectedProfileImport.update({
   id: '/profile',
   path: '/profile',
-  getParentRoute: () => protectedLayoutRoute,
-} as any)
-
-const protectedGuestbookRoute = protectedGuestbookImport.update({
-  id: '/guestbook',
-  path: '/guestbook',
-  getParentRoute: () => protectedLayoutRoute,
-} as any)
-
-const protectedCounterRoute = protectedCounterImport.update({
-  id: '/counter',
-  path: '/counter',
   getParentRoute: () => protectedLayoutRoute,
 } as any)
 
@@ -93,20 +79,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authSignInImport
       parentRoute: typeof authLayoutImport
     }
-    '/(protected)/counter': {
-      id: '/(protected)/counter'
-      path: '/counter'
-      fullPath: '/counter'
-      preLoaderRoute: typeof protectedCounterImport
-      parentRoute: typeof protectedLayoutImport
-    }
-    '/(protected)/guestbook': {
-      id: '/(protected)/guestbook'
-      path: '/guestbook'
-      fullPath: '/guestbook'
-      preLoaderRoute: typeof protectedGuestbookImport
-      parentRoute: typeof protectedLayoutImport
-    }
     '/(protected)/profile': {
       id: '/(protected)/profile'
       path: '/profile'
@@ -132,14 +104,10 @@ const authLayoutRouteWithChildren = authLayoutRoute._addFileChildren(
 )
 
 interface protectedLayoutRouteChildren {
-  protectedCounterRoute: typeof protectedCounterRoute
-  protectedGuestbookRoute: typeof protectedGuestbookRoute
   protectedProfileRoute: typeof protectedProfileRoute
 }
 
 const protectedLayoutRouteChildren: protectedLayoutRouteChildren = {
-  protectedCounterRoute: protectedCounterRoute,
-  protectedGuestbookRoute: protectedGuestbookRoute,
   protectedProfileRoute: protectedProfileRoute,
 }
 
@@ -150,16 +118,12 @@ const protectedLayoutRouteWithChildren = protectedLayoutRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof protectedLayoutRouteWithChildren
   '/sign-in': typeof authSignInRoute
-  '/counter': typeof protectedCounterRoute
-  '/guestbook': typeof protectedGuestbookRoute
   '/profile': typeof protectedProfileRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof protectedLayoutRouteWithChildren
   '/sign-in': typeof authSignInRoute
-  '/counter': typeof protectedCounterRoute
-  '/guestbook': typeof protectedGuestbookRoute
   '/profile': typeof protectedProfileRoute
 }
 
@@ -169,24 +133,20 @@ export interface FileRoutesById {
   '/(auth)': typeof authLayoutRouteWithChildren
   '/(protected)': typeof protectedLayoutRouteWithChildren
   '/(auth)/sign-in': typeof authSignInRoute
-  '/(protected)/counter': typeof protectedCounterRoute
-  '/(protected)/guestbook': typeof protectedGuestbookRoute
   '/(protected)/profile': typeof protectedProfileRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sign-in' | '/counter' | '/guestbook' | '/profile'
+  fullPaths: '/' | '/sign-in' | '/profile'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sign-in' | '/counter' | '/guestbook' | '/profile'
+  to: '/' | '/sign-in' | '/profile'
   id:
     | '__root__'
     | '/'
     | '/(auth)'
     | '/(protected)'
     | '/(auth)/sign-in'
-    | '/(protected)/counter'
-    | '/(protected)/guestbook'
     | '/(protected)/profile'
   fileRoutesById: FileRoutesById
 }
@@ -230,22 +190,12 @@ export const routeTree = rootRoute
     "/(protected)": {
       "filePath": "(protected)/layout.tsx",
       "children": [
-        "/(protected)/counter",
-        "/(protected)/guestbook",
         "/(protected)/profile"
       ]
     },
     "/(auth)/sign-in": {
       "filePath": "(auth)/sign-in.tsx",
       "parent": "/(auth)"
-    },
-    "/(protected)/counter": {
-      "filePath": "(protected)/counter.tsx",
-      "parent": "/(protected)"
-    },
-    "/(protected)/guestbook": {
-      "filePath": "(protected)/guestbook.tsx",
-      "parent": "/(protected)"
     },
     "/(protected)/profile": {
       "filePath": "(protected)/profile.tsx",

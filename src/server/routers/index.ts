@@ -1,5 +1,4 @@
 import { publicProcedure, router } from "../lib/trpc";
-import { guestbookRouter } from "./guestbook";
 import { userRouter } from "./user";
 
 export const appRouter = router({
@@ -9,7 +8,6 @@ export const appRouter = router({
 	helloFrom: publicProcedure.query(() => {
 		return "CF+Hono+tRPC";
 	}),
-	guestbook: guestbookRouter,
 	user: userRouter,
 });
 export type AppRouter = typeof appRouter;

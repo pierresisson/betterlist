@@ -2,15 +2,11 @@ import { trpcServer } from "@hono/trpc-server";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
-import { ConnectionCounter } from "./durable-objects/connection-counter";
-import { Counter } from "./durable-objects/counter";
 import type { AppBindings } from "./lib/types";
 import authMiddleware from "./middlewares/authMiddleware";
 import corsMiddleware from "./middlewares/corsMiddleware";
 import sessionMiddleware from "./middlewares/sessionMiddleware";
 import { appRouter } from "./routers";
-import { connectionCounterRouter } from "./routers/connection-counter";
-import { counterRouter } from "./routers/counter";
 
 const app = new Hono<AppBindings>({ strict: false });
 
@@ -41,13 +37,7 @@ app.use(
 	}),
 );
 
-app.route("/api/counter", counterRouter);
-app.route("/api/connection-count", connectionCounterRouter);
-
-app.get("*", (c) => c.env.ASSETS.fetch(c.req.raw)); // Catch-All API route for static assets
+app.get("*", (c) => c.env.ASSETS.fetch(c.req.raw));
 
 export type AppType = typeof app;
 export default app;
-
-// Export Durable Objects
-export { Counter, ConnectionCounter };

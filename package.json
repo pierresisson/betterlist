@@ -1,5 +1,5 @@
 {
-	"name": "better-cloud",
+	"name": "template-cloudflare-workers-react",
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
@@ -13,16 +13,17 @@
 		"cf:deploy": "bun run build && wrangler types && wrangler deploy",
 		"check": "biome check --write src --verbose",
 		"check:unsafe": "biome check --write src --unsafe --verbose",
-		"db:touch": "wrangler d1 execute better-cloud-db --local --command='SELECT 1'",
+		"db:touch": "wrangler d1 execute betterlist-db --local --command='SELECT 1'",
 		"db:generate": "drizzle-kit generate",
-		"db:migrate": "wrangler d1 migrations apply better-cloud-db --local",
-		"db:migrate:prod": "wrangler d1 migrations apply better-cloud-db --remote",
+		"db:migrate": "wrangler d1 migrations apply betterlist-db --local",
+		"db:migrate:prod": "wrangler d1 migrations apply betterlist-db --remote",
 		"db:studio": "drizzle-kit studio",
 		"db:studio:prod": "ENVIRONMENT=production drizzle-kit studio"
 	},
 	"dependencies": {
 		"@biomejs/biome": "^1.9.4",
 		"@hono/trpc-server": "^0.3.4",
+		"@hono/zod-validator": "^0.7.0",
 		"@libsql/client": "^0.15.5",
 		"@radix-ui/react-avatar": "^1.1.9",
 		"@radix-ui/react-dropdown-menu": "^2.1.14",
@@ -55,6 +56,7 @@
 	},
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "1.0.8",
+		"@cloudflare/workers-types": "^4.20250529.0",
 		"@tanstack/react-query-devtools": "^5.75.7",
 		"@tanstack/react-router-devtools": "^1.120.3",
 		"@tanstack/router-plugin": "^1.120.3",

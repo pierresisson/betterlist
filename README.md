@@ -1,131 +1,77 @@
-# Better-Cloud
+# Template Cloudflare Workers + React
 
-Better-Cloud is a modern, full-stack starter kit built for Cloudflare Workers. It combines a React + Vite frontend with an edge-deployed backend powered by Hono, tRPC, Drizzle ORM, and Cloudflare D1 & KV. Authentication is handled via Better Auth with email OTP and social OAuth login, and state management is seamlessly integrated using the TanStack ecosystem.
+Un template moderne et complet pour créer des applications full-stack avec Cloudflare Workers. Il combine un frontend React + Vite avec un backend déployé sur l'edge, alimenté par Hono, tRPC, Drizzle ORM, et Cloudflare D1. L'authentification est gérée via Better Auth avec OTP par email et connexion OAuth sociale.
 
-<p align="center">
-  <img src="public/preview-screenshot.png" alt="Better-Cloud Preview" />
-</p>
+## Stack Technique
 
-## Table of Contents
+- 🖥️ **Frontend**: React 19, TypeScript, Vite pour des builds rapides et HMR
+- 🔄 **Routing & Data**: Tanstack Router, Query, et Form
+- 🎨 **Styling**: Tailwind CSS, composants shadcn/ui, notifications sonner toast
+- 🌐 **Backend**: Hono sur Cloudflare Workers, API type-safe de bout en bout avec tRPC & Zod
+- 💾 **Base de données**: Cloudflare D1 via Drizzle ORM avec migrations et fichier SQLite local pour le développement
+- 🔒 **Authentification**: OTP par email et OAuth social avec Better Auth, mise en cache des sessions dans Cloudflare KV
+- 🌍 **Déploiement Edge-First**: Cloudflare Workers fournit un CDN global et un cache pour un rendu rapide
+- 🧰 **Outils**: Biome pour le linting/formatage, Bun pour la gestion des packages, Wrangler pour les déploiements
 
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Database](#database)
-- [Durable Objects](#durable-objects)
-- [Authentication](#authentication)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Environment Variables](#environment-variables)
-  - [Installation](#installation)
-  - [Development](#development)
-  - [Build and Preview](#build-and-preview)
-  - [Deployment](#deployment)
-- [License](#license)
-
----
-
-## Tech Stack
-
-- 🖥️ **Frontend**: React 19, TypeScript, Vite for fast builds & HMR
-- 🔄 **Routing & Data**: Tanstack Router, Query, and Form
-- 🎨 **Styling**: Tailwind CSS, shadcn/ui components, sonner toast notifications
-- 🌐 **Backend**: Hono on Cloudflare Workers, end-to-end type-safe API with tRPC & Zod
-- 💾 **Database**: Cloudflare D1 via Drizzle ORM with migrations & local SQLite file for development
-- 🔒 **Authentication**: Email OTP & social OAuth using Better Auth, session caching in CLoudflare KV
-- ⚡ **Real-time Features**: Cloudflare Durable Objects with WebSocket hibernation API for stateful, cost-effective real-time updates
-- 🗄️ **Persistent State**: SQLite-backed Durable Objects with ACID transactional guarantees, automatic hibernation, and global consistency
-- 🌍 **Edge-First Deployment**: Cloudflare Workers provides a global CDN and cache for fast rendering
-- 🧰 **Tooling**: Biome for linting/formatting, Bun for package management, Wrangler for deployments
-
-## Project Structure
+## Structure du Projet
 
 ```
-/ (root)
+/ (racine)
 ├── src
-│   ├── client                    # Frontend application
-│   │   ├── components            # UI & navigation components
-│   │   ├── routes                # Pages & layouts (TanStack Router)
-│   │   ├── lib                   # TRPC client, auth-client, theme-provider
-│   │   ├── index.css             # Tailwind & custom theming
-│   │   └── routeTree.gen.ts      # Auto-generated route definitions
-│   ├── server                    # Backend application on Workers
-│   │   ├── routers               # tRPC routers (health, guestbook, user)
-│   │   ├── middlewares           # Hono middleware (auth/db, CORS, session)
-│   │   ├── db                    # Drizzle schema, migrations, utils
-│   │   └── lib                   # Auth setup, TRPC init, type definitions
-├── dist                          # Production build output
-├── wrangler.jsonc                # Cloudflare Workers configuration
-├── worker-configuration.d.ts     # CF types generated with `wrangler types`
-├── vite.config.ts                # Vite plugin configuration
-├── drizzle.config.ts             # Drizzle-kit configuration
-├── .env                          # Local env variables
-└── .dev.vars                     # Local Cloudflare env variables
+│   ├── client                    # Application frontend
+│   │   ├── components            # Composants UI et navigation
+│   │   ├── routes                # Pages et layouts (TanStack Router)
+│   │   ├── lib                   # Client TRPC, auth-client, theme-provider
+│   │   ├── index.css             # Tailwind et thèmes personnalisés
+│   │   └── routeTree.gen.ts      # Définitions de routes auto-générées
+│   ├── server                    # Application backend sur Workers
+│   │   ├── routers               # Routeurs tRPC
+│   │   ├── middlewares           # Middleware Hono (auth/db, CORS, session)
+│   │   ├── db                    # Schéma Drizzle, migrations, utilitaires
+│   │   └── lib                   # Configuration auth, init TRPC, définitions de types
+├── dist                          # Sortie de build de production
+├── wrangler.toml                 # Configuration Cloudflare Workers
+├── worker-configuration.d.ts     # Types CF générés avec `wrangler types`
+├── vite.config.ts                # Configuration des plugins Vite
+├── drizzle.config.ts             # Configuration Drizzle-kit
+├── .env                          # Variables d'environnement locales
+└── .dev.vars                     # Variables d'environnement Cloudflare locales
 ```
 
-## Database
+## Base de Données
 
-- Managed with Drizzle ORM & D1
-- Local SQLite stored under `.wrangler/`
+- Gérée avec Drizzle ORM & D1
+- SQLite local stocké sous `.wrangler/`
 
-| Script                    | Description                              |
-| ------------------------- | ---------------------------------------- |
-| `npm run db:migrate`      | Apply migrations to local SQLite DB      |
-| `npm run db:migrate:prod` | Apply migrations on remote Cloudflare D1 |
-| `npm run db:studio`       | Launch Drizzle Studio for local DB       |
-| `npm run db:studio:prod`  | Launch Drizzle Studio for prod DB        |
-| `bun cf:typegen`          | Generate types from wrangler.jsonc       |
-| `bun cf:dev`              | Start local Workers dev server           |
-| `bun cf:deploy`           | Deploy to Cloudflare Workers             |
+| Script                    | Description                                    |
+| ------------------------- | ---------------------------------------------- |
+| `bun run db:migrate`      | Appliquer les migrations à la DB SQLite locale |
+| `bun run db:migrate:prod` | Appliquer les migrations sur Cloudflare D1 distant |
+| `bun run db:studio`       | Lancer Drizzle Studio pour la DB locale       |
+| `bun run db:studio:prod`  | Lancer Drizzle Studio pour la DB de prod      |
+| `bun cf:typegen`          | Générer les types depuis wrangler.toml        |
+| `bun cf:dev`              | Démarrer le serveur de dev Workers local      |
+| `bun cf:deploy`           | Déployer sur Cloudflare Workers               |
 
-## Durable Objects
+## Authentification
 
-Better-Cloud includes Durable Objects for stateful, real-time functionality:
+- Flux OTP par email via le plugin Better Auth
+- Connexion OAuth sociale via les fournisseurs Google et GitHub
+- Données utilisateur stockées dans la base de données D1 (binding `DB`)
+- Données de session mises en cache dans l'espace de noms KV (`SESSION_KV` binding)
+- Tous les endpoints d'auth sous `/api/auth/*`
 
-### Counter Durable Object
-- **Global state management**: Maintains a persistent counter with strong consistency guarantees
-- **SQLite-backed storage**: All state persists across hibernation with ACID transactions
-- **Real-time WebSocket updates**: Uses hibernation API for cost-effective live synchronization
-- **Comprehensive metrics**: Tracks increments, decrements, last updater, and update timestamps
-- **Automatic cleanup**: Scheduled alarms for periodic maintenance tasks
+## Démarrage
 
-### Connection Counter Durable Object
-- **Live connection tracking**: Monitors active WebSocket connections across the application
-- **Real-time broadcasting**: Updates all clients when connection counts change
-- **Hibernation-optimized**: Minimal memory usage when idle, instant wake on demand
+### Prérequis
 
-### Key Benefits
-- **Cost Efficiency**: Hibernation model eliminates memory charges during idle periods
-- **Zero Data Loss**: SQLite provides ACID transactional guarantees with WAL mode
-- **Strong Consistency**: Single Durable Object processes operations sequentially
-- **Edge Performance**: Global deployment with sub-millisecond wake times
-- **Scalable WebSockets**: Support for up to 32,768 concurrent connections per Durable Object
+- Node.js v18+ ou Bun v1.2+ installé
+- CLI Wrangler (`npm install -g wrangler`)
+- Compte Cloudflare avec espaces de noms D1 et KV pour la production
 
-Access the live counter demo at `/counter` to see Durable Objects in action.
+### Variables d'Environnement
 
-## Authentication
-
-- Email OTP flows via Better Auth plugin
-- Social OAuth login via Google & GitHub providers
-- User data stored in D1 database (`DB` binding)
-- Session data cached in KV namespace (`SESSION_KV` binding)
-- All auth endpoints under `/api/auth/*`
-
-I'm making use of the trick mentioned in [this issue](https://github.com/cloudflare/workers-sdk/issues/8879) on the workers-sdk repo to get social OAuth working properly. Hopefully once the `_routes.json` proposal (mentioned in [this discussion](https://github.com/cloudflare/workers-sdk/discussions/9143)) launches, this will be a simpler process!
-
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js v18+ or Bun v1.2+ installed
-- Wrangler CLI (`npm install -g wrangler`)
-- Cloudflare account with D1 & KV namespaces for production
-
-### Environment Variables
-
-Copy `.dev.vars.example` to `.dev.vars` and fill in the values.
-
-Copy `.env.example` to `.env` and fill in the values.
+Copiez `.dev.vars.example` vers `.dev.vars` et remplissez les valeurs.
 
 ### Installation
 
@@ -133,56 +79,39 @@ Copy `.env.example` to `.env` and fill in the values.
 bun install
 ```
 
-### Development
+### Développement
 
-Copy `wrangler.example.jsonc` to `wrangler.jsonc` and update it with your own app data and bindings:
+Configurez votre `wrangler.toml` avec vos propres données d'application et bindings :
 
-- Configure D1 database binding (`DB`)
-- Configure KV namespace binding (`SESSION_KV`)
-- Configure Durable Object bindings (`COUNTER`, `CONNECTION_COUNTER`)
-- Set up migration tags for Durable Objects with SQLite classes
+- Configurez le binding de base de données D1 (`DB`)
+- Configurez le binding d'espace de noms KV (`SESSION_KV`)
 
-Then, every time you edit the `wrangler.jsonc` file, make sure to run `bun cf:typegen` to update the `worker-configuration.d.ts` file with the latest types.
+Puis, à chaque fois que vous éditez le fichier `wrangler.toml`, assurez-vous d'exécuter `bun cf:typegen` pour mettre à jour le fichier `worker-configuration.d.ts` avec les derniers types.
 
-Start local Vite server and Workers server separately:
+Démarrez le serveur Vite local et le serveur Workers séparément :
 
 ```bash
-bun dev     // starts frontend server at http://localhost:5173
-bun cf:dev  // starts workers server at http://localhost:8787
+bun dev     // démarre le serveur frontend sur http://localhost:5173
+bun cf:dev  // démarre le serveur workers sur http://localhost:8787
 ```
 
-**Important for Durable Objects development:**
-- The Workers dev server (`bun cf:dev`) is required for Durable Objects functionality
-- Durable Objects are automatically created and bound during local development
-- The hibernation API is not used in local development
-- WebSocket connections for real-time features work through the Workers server
-- The frontend connects to both servers: Vite for HMR, Workers for API/WebSocket
-
-As far as I can tell so far, it is necessary to launch both servers in order to get social OAuth login to function properly in local development. Using only the Vite server (and setting all local url env vars to localhost:5173) returns a "Not Found" error when attempting social login. But if you know a way around this error, please do let me know!
-
-### Build and Preview
+### Build et Aperçu
 
 ```bash
-bun build     // creates static assets bundle in ./dist/
-bun preview   // preview prod build available at http://localhost:4173
+bun build     // crée le bundle d'assets statiques dans ./dist/
+bun preview   // aperçu du build de prod disponible sur http://localhost:4173
 ```
 
-### Deployment
+### Déploiement
 
-Deploy to live site on Cloudflare Workers, to custom domain or `app-name.username.workers.dev` domain:
+Déployez sur le site en direct sur Cloudflare Workers, vers un domaine personnalisé ou le domaine `app-name.username.workers.dev` :
 
 ```bash
 bun cf:deploy
-# or
+# ou
 bunx wrangler deploy
 ```
 
-**Durable Objects Deployment Notes:**
-- Durable Objects are automatically deployed with your Worker
-- SQLite classes are migrated using the `migrations` configuration in `wrangler.jsonc`
-- First deployment may take longer due to Durable Object initialization
-- Durable Objects maintain state across deployments and updates
-
-## License
+## Licence
 
 MIT License
