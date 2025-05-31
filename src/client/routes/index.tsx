@@ -28,6 +28,7 @@ function RouteComponent() {
 		...trpc.helloFrom.queryOptions(),
 		enabled: false,
 	});
+	const userName = useQuery(trpc.user.getUserName.queryOptions());
 
 	return (
 		<div className="container mx-auto w-full min-w-0 max-w-[90vw] px-3 py-3 sm:max-w-2xl sm:px-4 md:max-w-3xl">
@@ -35,6 +36,21 @@ function RouteComponent() {
 				{title}
 			</pre>
 			<div className="grid gap-4 sm:gap-6">
+				<Card className="border-2 border-betterlist-primary bg-betterlist-badge-yellow p-3 sm:p-4">
+					<CardContent className="p-0">
+						<div className="flex items-center justify-center">
+							<div className="text-center">
+								<h2 className="mb-2 font-medium text-betterlist-dark text-lg">
+									Bienvenue !
+								</h2>
+								<p className="text-betterlist-dark/80">
+									Salut {userName.isLoading ? "..." : userName.data} 👋
+								</p>
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+
 				<Card className="bg-background p-3 sm:p-4">
 					<CardContent className="p-0">
 						<div className="flex items-center justify-center gap-6">

@@ -1,9 +1,17 @@
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { user } from "../db/schema/auth";
-import { protectedProcedure, router } from "../lib/trpc";
+import { protectedProcedure, publicProcedure, router } from "../lib/trpc";
 
 export const userRouter = router({
+	getUserName: publicProcedure.query(async ({ ctx }) => {
+		const userData = await ctx.db
+			.select({ name: user.name })
+			.from(user)
+			.limit(1)
+			.get();
+		return userData?.name || "User";
+	}),
 	getProfile: protectedProcedure.query(async ({ ctx }) => {
 		return await ctx.db
 			.select()
