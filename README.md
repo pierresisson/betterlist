@@ -43,15 +43,15 @@ Un template moderne et complet pour créer des applications full-stack avec Clou
 - Gérée avec Drizzle ORM & D1
 - SQLite local stocké sous `.wrangler/`
 
-| Script                    | Description                                    |
-| ------------------------- | ---------------------------------------------- |
-| `bun run db:migrate`      | Appliquer les migrations à la DB SQLite locale |
+| Script                    | Description                                        |
+| ------------------------- | -------------------------------------------------- |
+| `bun run db:migrate`      | Appliquer les migrations à la DB SQLite locale     |
 | `bun run db:migrate:prod` | Appliquer les migrations sur Cloudflare D1 distant |
-| `bun run db:studio`       | Lancer Drizzle Studio pour la DB locale       |
-| `bun run db:studio:prod`  | Lancer Drizzle Studio pour la DB de prod      |
-| `bun cf:typegen`          | Générer les types depuis wrangler.toml        |
-| `bun cf:dev`              | Démarrer le serveur de dev Workers local      |
-| `bun cf:deploy`           | Déployer sur Cloudflare Workers               |
+| `bun run db:studio`       | Lancer Drizzle Studio pour la DB locale            |
+| `bun run db:studio:prod`  | Lancer Drizzle Studio pour la DB de prod           |
+| `bun cf:typegen`          | Générer les types depuis wrangler.toml             |
+| `bun cf:dev`              | Démarrer le serveur de dev Workers local           |
+| `bun cf:deploy`           | Déployer sur Cloudflare Workers                    |
 
 ## Authentification
 

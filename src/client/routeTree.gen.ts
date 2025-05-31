@@ -10,162 +10,162 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as protectedLayoutImport } from './routes/(protected)/layout'
-import { Route as authLayoutImport } from './routes/(auth)/layout'
-import { Route as IndexImport } from './routes/index'
-import { Route as protectedProfileImport } from './routes/(protected)/profile'
-import { Route as authSignInImport } from './routes/(auth)/sign-in'
+import { Route as rootRoute } from "./routes/__root";
+import { Route as protectedLayoutImport } from "./routes/(protected)/layout";
+import { Route as authLayoutImport } from "./routes/(auth)/layout";
+import { Route as IndexImport } from "./routes/index";
+import { Route as protectedProfileImport } from "./routes/(protected)/profile";
+import { Route as authSignInImport } from "./routes/(auth)/sign-in";
 
 // Create/Update Routes
 
 const protectedLayoutRoute = protectedLayoutImport.update({
-  id: '/(protected)',
+  id: "/(protected)",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const authLayoutRoute = authLayoutImport.update({
-  id: '/(auth)',
+  id: "/(auth)",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const protectedProfileRoute = protectedProfileImport.update({
-  id: '/profile',
-  path: '/profile',
+  id: "/profile",
+  path: "/profile",
   getParentRoute: () => protectedLayoutRoute,
-} as any)
+} as any);
 
 const authSignInRoute = authSignInImport.update({
-  id: '/sign-in',
-  path: '/sign-in',
+  id: "/sign-in",
+  path: "/sign-in",
   getParentRoute: () => authLayoutRoute,
-} as any)
+} as any);
 
 // Populate the FileRoutesByPath interface
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/(auth)': {
-      id: '/(auth)'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof authLayoutImport
-      parentRoute: typeof rootRoute
-    }
-    '/(protected)': {
-      id: '/(protected)'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof protectedLayoutImport
-      parentRoute: typeof rootRoute
-    }
-    '/(auth)/sign-in': {
-      id: '/(auth)/sign-in'
-      path: '/sign-in'
-      fullPath: '/sign-in'
-      preLoaderRoute: typeof authSignInImport
-      parentRoute: typeof authLayoutImport
-    }
-    '/(protected)/profile': {
-      id: '/(protected)/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof protectedProfileImport
-      parentRoute: typeof protectedLayoutImport
-    }
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/(auth)": {
+      id: "/(auth)";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof authLayoutImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/(protected)": {
+      id: "/(protected)";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof protectedLayoutImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/(auth)/sign-in": {
+      id: "/(auth)/sign-in";
+      path: "/sign-in";
+      fullPath: "/sign-in";
+      preLoaderRoute: typeof authSignInImport;
+      parentRoute: typeof authLayoutImport;
+    };
+    "/(protected)/profile": {
+      id: "/(protected)/profile";
+      path: "/profile";
+      fullPath: "/profile";
+      preLoaderRoute: typeof protectedProfileImport;
+      parentRoute: typeof protectedLayoutImport;
+    };
   }
 }
 
 // Create and export the route tree
 
 interface authLayoutRouteChildren {
-  authSignInRoute: typeof authSignInRoute
+  authSignInRoute: typeof authSignInRoute;
 }
 
 const authLayoutRouteChildren: authLayoutRouteChildren = {
   authSignInRoute: authSignInRoute,
-}
+};
 
 const authLayoutRouteWithChildren = authLayoutRoute._addFileChildren(
   authLayoutRouteChildren,
-)
+);
 
 interface protectedLayoutRouteChildren {
-  protectedProfileRoute: typeof protectedProfileRoute
+  protectedProfileRoute: typeof protectedProfileRoute;
 }
 
 const protectedLayoutRouteChildren: protectedLayoutRouteChildren = {
   protectedProfileRoute: protectedProfileRoute,
-}
+};
 
 const protectedLayoutRouteWithChildren = protectedLayoutRoute._addFileChildren(
   protectedLayoutRouteChildren,
-)
+);
 
 export interface FileRoutesByFullPath {
-  '/': typeof protectedLayoutRouteWithChildren
-  '/sign-in': typeof authSignInRoute
-  '/profile': typeof protectedProfileRoute
+  "/": typeof protectedLayoutRouteWithChildren;
+  "/sign-in": typeof authSignInRoute;
+  "/profile": typeof protectedProfileRoute;
 }
 
 export interface FileRoutesByTo {
-  '/': typeof protectedLayoutRouteWithChildren
-  '/sign-in': typeof authSignInRoute
-  '/profile': typeof protectedProfileRoute
+  "/": typeof protectedLayoutRouteWithChildren;
+  "/sign-in": typeof authSignInRoute;
+  "/profile": typeof protectedProfileRoute;
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/(auth)': typeof authLayoutRouteWithChildren
-  '/(protected)': typeof protectedLayoutRouteWithChildren
-  '/(auth)/sign-in': typeof authSignInRoute
-  '/(protected)/profile': typeof protectedProfileRoute
+  __root__: typeof rootRoute;
+  "/": typeof IndexRoute;
+  "/(auth)": typeof authLayoutRouteWithChildren;
+  "/(protected)": typeof protectedLayoutRouteWithChildren;
+  "/(auth)/sign-in": typeof authSignInRoute;
+  "/(protected)/profile": typeof protectedProfileRoute;
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sign-in' | '/profile'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sign-in' | '/profile'
+  fileRoutesByFullPath: FileRoutesByFullPath;
+  fullPaths: "/" | "/sign-in" | "/profile";
+  fileRoutesByTo: FileRoutesByTo;
+  to: "/" | "/sign-in" | "/profile";
   id:
-    | '__root__'
-    | '/'
-    | '/(auth)'
-    | '/(protected)'
-    | '/(auth)/sign-in'
-    | '/(protected)/profile'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/"
+    | "/(auth)"
+    | "/(protected)"
+    | "/(auth)/sign-in"
+    | "/(protected)/profile";
+  fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  authLayoutRoute: typeof authLayoutRouteWithChildren
-  protectedLayoutRoute: typeof protectedLayoutRouteWithChildren
+  IndexRoute: typeof IndexRoute;
+  authLayoutRoute: typeof authLayoutRouteWithChildren;
+  protectedLayoutRoute: typeof protectedLayoutRouteWithChildren;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   authLayoutRoute: authLayoutRouteWithChildren,
   protectedLayoutRoute: protectedLayoutRouteWithChildren,
-}
+};
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
 /* ROUTE_MANIFEST_START
 {
