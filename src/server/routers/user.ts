@@ -12,6 +12,7 @@ export const userRouter = router({
 			.get();
 		return userData?.name || "User";
 	}),
+
 	getProfile: protectedProcedure.query(async ({ ctx }) => {
 		return await ctx.db
 			.select()

@@ -1,5 +1,5 @@
-import { Avatar, AvatarFallback } from "@client/components/ui/avatar";
 import { Card, CardContent } from "@client/components/ui/card";
+import { authClient } from "@client/lib/auth-client";
 import { trpc } from "@client/lib/trpc-client";
 import { useQuery } from "@tanstack/react-query";
 
@@ -15,7 +15,9 @@ export function WelcomeCard({
 	newCollaborations = 3,
 	currentStreak = 7,
 }: WelcomeCardProps) {
-	const userName = useQuery(trpc.user.getUserName.queryOptions());
+	const { data: session, isPending } = authClient.useSession();
+	const userName = isPending ? "..." : session?.user?.name || "Guest";
+
 	return (
 		<Card
 			className="border-betterlist-primary/20 bg-betterlist-badge-yellow"
@@ -26,7 +28,7 @@ export function WelcomeCard({
 					<div className="flex items-center gap-2">
 						<div>
 							<h1 className="mb-1 font-bold text-betterlist-dark text-xl">
-								Welcome back, {userName.isLoading ? "..." : userName.data}!
+								Welcome back, {userName}!
 							</h1>
 							<p className="text-betterlist-dark/70 text-sm">
 								You have {activeChallenges} active challenges and{" "}
