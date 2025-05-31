@@ -82,7 +82,7 @@ BetterList allows users to create lists for virtually any purpose, such as:
 
 ### 🧰 Tooling
 - **Linting/Formatting**: Biome
-- **Package Management**: Bun
+- **Package Management**: Bun only
 - **Deployment**: Wrangler
 
 ---

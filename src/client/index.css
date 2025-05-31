@@ -39,6 +39,13 @@
 	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
 	--color-sidebar-border: var(--sidebar-border);
 	--color-sidebar-ring: var(--sidebar-ring);
+	--color-betterlist-primary: var(--betterlist-primary);
+	--color-betterlist-dark: var(--betterlist-dark);
+	--color-betterlist-green: var(--betterlist-green);
+	--color-betterlist-blue: var(--betterlist-blue);
+	--color-betterlist-yellow: var(--betterlist-yellow);
+	--color-betterlist-purple: var(--betterlist-purple);
+	--color-betterlist-badge-yellow: var(--betterlist-badge-yellow);
 }
 
 :root {
@@ -74,6 +81,13 @@
 	--sidebar-accent-foreground: oklch(0.216 0.006 56.043);
 	--sidebar-border: oklch(0.923 0.003 48.717);
 	--sidebar-ring: oklch(0.709 0.01 56.259);
+	--betterlist-primary: #d97706;
+	--betterlist-dark: #1f2937;
+	--betterlist-green: #d1fae5;
+	--betterlist-blue: #dbeafe;
+	--betterlist-yellow: #fef3c7;
+	--betterlist-purple: #f3e8ff;
+	--betterlist-badge-yellow: #fffbeb;
 }
 
 .dark {

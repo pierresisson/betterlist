@@ -1,108 +1,71 @@
-import { ChevronDown, ExternalLink } from "lucide-react";
-import { useState } from "react";
-
 import { authClient } from "@client/lib/auth-client";
 import { Link } from "@tanstack/react-router";
 
-import { ThemeToggle } from "@client/components/navbar/theme-toggle";
-import { UserMenu } from "@client/components/navbar/user-menu";
-import { Button } from "@client/components/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "@client/components/ui/dropdown-menu";
-
 export function Header() {
 	const { data: session } = authClient.useSession();
-	const [isOpen, setIsOpen] = useState(false);
 
-	const links = session
-		? [
-				{ to: "/", label: "Home" },
-				{ to: "/counter", label: "Counter" },
-				{ to: "/guestbook", label: "Guestbook" },
-			]
-		: [{ to: "/", label: "Home" }];
+	const navigationLinks = [
+		{ to: "/dashboard", label: "Dashboard" },
+		{ to: "/my-lists", label: "My Lists" },
+		{ to: "/challenges", label: "Challenges" },
+		{ to: "/leaderboard", label: "Leaderboards" },
+	];
 
 	return (
-		<div>
-			<div className="flex flex-row items-center justify-between px-2 py-1">
-				{/* Mobile Navigation Menu */}
-				<div className="md:hidden">
-					<DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-						<DropdownMenuTrigger asChild>
-							<Button
-								variant="ghost"
-								className="flex items-center gap-1 text-lg"
+		<header className="border-gray-200 border-b bg-white px-6 py-4">
+			<div className="flex items-center justify-between">
+				<div className="flex items-center space-x-8">
+					<Link to="/" className="flex items-center space-x-2">
+						<div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#d97706]">
+							<span className="font-bold text-lg text-white">✓</span>
+						</div>
+						<span className="font-semibold text-gray-900 text-xl">
+							BetterList
+						</span>
+					</Link>
+
+					<nav className="flex items-center space-x-6">
+						{navigationLinks.map(({ to, label }) => (
+							<Link
+								key={to}
+								to={to}
+								className="font-medium text-gray-700 transition-colors hover:text-[#d97706]"
+								activeProps={{
+									className: "text-[#d97706] font-medium",
+								}}
 							>
-								Menu
-								<ChevronDown
-									className={`h-4 w-4 transition-transform duration-200 ${
-										isOpen ? "rotate-180" : ""
-									}`}
-								/>
-								<span className="sr-only">Open menu</span>
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align="start">
-							{links.map(({ to, label }) => (
-								<DropdownMenuItem key={to} asChild className="text-lg">
-									<Link to={to} className="w-full">
-										{label}
-									</Link>
-								</DropdownMenuItem>
-							))}
-							<DropdownMenuSeparator />
-							<DropdownMenuItem asChild className="text-lg">
-								<a
-									href={import.meta.env.VITE_GITHUB_URL}
-									target="_blank"
-									rel="noopener noreferrer"
-									className="flex w-full items-center gap-1"
-								>
-									Source
-									<ExternalLink className="h-4 w-4" />
-								</a>
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
+								{label}
+							</Link>
+						))}
+					</nav>
 				</div>
 
-				{/* Desktop Navigation */}
-				<nav className="hidden items-center gap-1 md:flex">
-					{links.map(({ to, label }) => (
-						<Button key={to} className="text-lg" variant="ghost" asChild>
-							<Link to={to}>{label}</Link>
-						</Button>
-					))}
-					<Button className="mr-1 text-lg" variant="ghost" asChild>
-						<a
-							href={import.meta.env.VITE_GITHUB_URL}
-							target="_blank"
-							rel="noopener noreferrer"
-							className="flex items-center gap-1"
-						>
-							Source
-							<ExternalLink className="h-4 w-4" />
-						</a>
-					</Button>
-				</nav>
-
-				<div className="flex items-center gap-2">
-					<ThemeToggle />
+				<div className="flex items-center space-x-4">
 					{session ? (
-						<UserMenu />
+						<>
+							<div className="flex items-center space-x-2 rounded-full bg-[#fffbeb] px-3 py-1">
+								<div className="h-3 w-3 rounded-full bg-yellow-400" />
+								<span className="font-medium text-gray-900 text-sm">
+									1,247 points
+								</span>
+							</div>
+
+							<div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200">
+								<span className="font-medium text-gray-600 text-sm">
+									{session.user?.email?.charAt(0).toUpperCase()}
+								</span>
+							</div>
+						</>
 					) : (
-						<Button variant="outline" asChild>
-							<Link to="/sign-in">Sign In</Link>
-						</Button>
+						<Link
+							to="/sign-in"
+							className="rounded-lg bg-[#d97706] px-4 py-2 font-medium text-white transition-colors hover:bg-[#b45309]"
+						>
+							Sign In
+						</Link>
 					)}
 				</div>
 			</div>
-			<hr />
-		</div>
+		</header>
 	);
 }
