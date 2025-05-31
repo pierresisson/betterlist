@@ -15,7 +15,11 @@ export const auth = (db: DrizzleD1Database, env: Env) => {
 		secret: env.BETTER_AUTH_SECRET,
 		baseURL: env.BETTER_AUTH_URL,
 		basePath: "/api/auth",
-		trustedOrigins: [env.TRUSTED_ORIGINS || ""],
+		// trustedOrigins: [env.TRUSTED_ORIGINS || ""],
+		trustedOrigins: env.TRUSTED_ORIGINS?.split(",") || [
+			"http://localhost:5173",
+			"http://localhost:8787",
+		],
 		socialProviders: {
 			google: {
 				clientId: env.GOOGLE_CLIENT_ID || "",

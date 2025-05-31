@@ -62,9 +62,10 @@ export function SignInForm() {
 
 	const socialSignInMutation = useMutation({
 		mutationFn: async ({ provider }: { provider: "google" }) => {
-			const callbackURL = import.meta.env.PROD
-				? `${import.meta.env.VITE_FRONTEND_PROD_URL}/profile`
-				: `${import.meta.env.VITE_FRONTEND_DEV_URL}/profile`;
+			const callbackURL = "http://localhost:5173/profile";
+			// const callbackURL = import.meta.env.PROD
+			// 	? `${import.meta.env.VITE_FRONTEND_PROD_URL}/profile`
+			// 	: `${import.meta.env.VITE_FRONTEND_DEV_URL}/profile`;
 
 			return authClient.signIn.social({
 				provider,

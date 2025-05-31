@@ -56,7 +56,7 @@ Un template moderne et complet pour créer des applications full-stack avec Clou
 ## Authentification
 
 - Flux OTP par email via le plugin Better Auth
-- Connexion OAuth sociale via les fournisseurs Google et GitHub
+- Connexion OAuth sociale via les fournisseurs Google
 - Données utilisateur stockées dans la base de données D1 (binding `DB`)
 - Données de session mises en cache dans l'espace de noms KV (`SESSION_KV` binding)
 - Tous les endpoints d'auth sous `/api/auth/*`
