@@ -14,7 +14,7 @@ export const Route = createFileRoute("/leaderboard")({
 function Leaderboard() {
 	return (
 		<div className="min-h-full bg-white">
-			<div className="p-8">
+			<div className="p-4">
 				<h1 className="font-semibold text-2xl text-gray-900">Leaderboards</h1>
 			</div>
 		</div>

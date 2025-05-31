@@ -14,7 +14,7 @@ export const Route = createFileRoute("/my-lists")({
 function MyLists() {
 	return (
 		<div className="min-h-full bg-white">
-			<div className="p-8">
+			<div className="p-4">
 				<h1 className="font-semibold text-2xl text-gray-900">My Lists</h1>
 			</div>
 		</div>

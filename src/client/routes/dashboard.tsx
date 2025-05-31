@@ -15,7 +15,7 @@ export const Route = createFileRoute("/dashboard")({
 function Dashboard() {
 	return (
 		<div className="min-h-full bg-white">
-			<div className="p-8">
+			<div className="p-4">
 				<WelcomeCard />
 			</div>
 		</div>
