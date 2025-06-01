@@ -15,8 +15,7 @@ export function WelcomeCard({
 	newCollaborations = 3,
 	currentStreak = 7,
 }: WelcomeCardProps) {
-	const { data: session, isPending } = authClient.useSession();
-	const userName = isPending ? "..." : session?.user?.name || "Guest";
+	const userName = useQuery(trpc.user.getUserName.queryOptions());
 
 	return (
 		<Card
@@ -28,7 +27,7 @@ export function WelcomeCard({
 					<div className="flex items-center gap-2">
 						<div>
 							<h1 className="mb-1 font-bold text-betterlist-dark text-xl">
-								Welcome back, {userName}!
+								Welcome back, {userName.isLoading ? "..." : userName.data}!
 							</h1>
 							<p className="text-betterlist-dark/70 text-sm">
 								You have {activeChallenges} active challenges and{" "}
